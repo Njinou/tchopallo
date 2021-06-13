@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "682064385547",
+    "project_id": "tchopallo237",
+    "storage_bucket": "tchopallo237.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682064385547:android:3c0fd736a387d0f504590e",
+        "android_client_info": {
+          "package_name": "com.tchopallo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682064385547-dvnvocev5mlqn1amth7pqqp5s002uge1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tchopallo",
+            "certificate_hash": "33f5883f3e12eab97a9c40323599c160ed75ac3f"
+          }
+        },
+        {
+          "client_id": "682064385547-hlggb66bt1u9bg424qabeg9go7801o0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIlt-3HA2jh7TbEmE5087pYMF7NQg8W_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682064385547-hlggb66bt1u9bg424qabeg9go7801o0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
