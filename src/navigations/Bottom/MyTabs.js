@@ -24,6 +24,7 @@ import line10 from '../../ressources/Appicon/line10.png';
 import Line10grey from '../../ressources/Appicon/Line10grey.png';
 import statuschecked from '../../ressources/Appicon/statuschecked.png';
 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 /*
 2.5 farine... 1000 
@@ -106,7 +107,33 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  containera: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  /*container: {
+    ...StyleSheet.absoluteFillObject,
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },*/
 });
 
 const Tab = createBottomTabNavigator();
@@ -245,7 +272,19 @@ function PdjScreen (){
 }
 function OrderDelivery (){
   return (
-    <Text> Les entrees seront une specialite.......</Text>
+    <View style={styles.container}>
+    <MapView
+      provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+      style={styles.map}
+      region={{
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      }}
+    >
+    </MapView>
+  </View>
   );
 
 }
@@ -362,7 +401,24 @@ function VienoiserieScreen (){
 }
 
 function PlatScreen (){
-  return <Text> kouakoukou got me stuck into something......</Text>
+  const [position, setPosition] = useState({
+    latitude: 10,
+    longitude: 10,
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
+  });
+  
+  return (
+    <MapView
+    style={ styles.map }
+    initialRegion={{
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }}
+  />
+  );
 }
 function DessertScreen (){
   return <Text> dessert is good for digestion... deal with it .........</Text>
