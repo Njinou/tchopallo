@@ -1,4 +1,7 @@
 {
   "name": "tchopallo",
-  "displayName": "tchopallo"
+  "displayName": "tchopallo",
+  "android": {
+    "permissions": ["ACCESS_BACKGROUND_LOCATION"]
+  }
 }

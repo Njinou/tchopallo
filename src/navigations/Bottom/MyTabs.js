@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput} from 'react-native';
 import {View} from 'react-native';
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import pdj from '../../ressources/images/pdj.png';
 import entree from '../../ressources/images/entree.jpeg';
 import raffraichissement from  '../../ressources/images/raffraichissement.jpeg';
@@ -24,7 +24,13 @@ import line10 from '../../ressources/Appicon/line10.png';
 import Line10grey from '../../ressources/Appicon/Line10grey.png';
 import statuschecked from '../../ressources/Appicon/statuschecked.png';
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import MapView, { PROVIDER_GOOGLE,Marker, Polyline,Polygon } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+
+
+import * as Location from 'expo-location';
+import Geolocation from 'react-native-geolocation-service';
+import MapViewDirections from 'react-native-maps-directions';
+import PlatformKey from '../../../keyas';
 
 /*
 2.5 farine... 1000 
@@ -41,6 +47,7 @@ loyer 250 => 6000 francs.....  => 4000
 10.5000]
 */
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { exp } from 'react-native/Libraries/Animated/Easing';
 //changer l'icone de plats chauds..
 // on peut regrouper dans raffraichissement  cocktail et jus/ biere ou liqueur 
 //amuse gueule... vienoiserie,....
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
-  containera: {
+  /*containera: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -123,17 +130,42 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  /*container: {
-    ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
   },*/
+  containera: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  bubble: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  latlng: {
+    width: 200,
+    alignItems: 'stretch',
+  },
+  button: {
+    width: 100,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    backgroundColor: 'transparent',
+  },
+  buttonText: {
+    textAlign: 'center',
+  },
+  centeredText: { textAlign: 'center' },
+  
 });
 
 const Tab = createBottomTabNavigator();
@@ -407,17 +439,123 @@ function PlatScreen (){
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
-  
-  return (
+
+  const [coordinates] = useState([
+    {
+      latitude: 4.057668 ,
+      longitude: 9.737302,
+    },
+    {
+      latitude: 4.057668,
+      longitude:9.717302,
+    },
+  ]);
+
+ const [userLocation,setUserLocation] = useState('');
+ const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [polylines,setPolylines] = useState([]);
+  const [editing,setEditing] = useState(null);
+  const [id,setId] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High});
+      console.log('location and location ',location)
+      setLocation(location);
+
+      let locationa = await Location.watchPositionAsync(
+        {accuracy:Location.Accuracy.High, timeInterval: 500, distanceInterval: 0 },
+        (loc) => {console.log('loc loc',loc);}
+      );
+      console.log('locationa',locationa);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = location;
+    
+  }
+
+  const   finish = () =>{
+   setPolylines([...polylines, editing])    
+   setEditing(null);
+  }
+
+  const onPanDrag = (e) =>{
+    if (!editing) {
+      let val =id;
+      setEditing({
+        id: val++,
+        coordinates: [e.nativeEvent.coordinate],
+      });
+      console.log('editing',editing);
+    } else {
+      setEditing({
+        ...editing,
+        coordinates: [...editing.coordinates, e.nativeEvent.coordinate],
+      });
+      console.log('editing',editing);
+    }
+  }
+
+  return ( 
+    <View style={{flex:1}}>
     <MapView
-    style={ styles.map }
-    initialRegion={{
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    }}
-  />
+        style={styles.map}
+        initialRegion={{
+          latitude: coordinates[0].latitude, 
+          longitude: coordinates[0].longitude,
+          latitudeDelta: 0.0622,
+          longitudeDelta: 0.0121,
+          
+        }}
+        scrollEnabled={true}
+        onPanDrag={e => onPanDrag(e)}
+        >
+
+        <Marker coordinate={coordinates[0]} />
+        <Marker coordinate={coordinates[1]} />
+        {polylines.map(polyline => (
+            <Polyline
+              key={polyline.id}
+              coordinates={polyline.coordinates}
+              strokeColor="#000"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={1}
+            />
+          ))}
+          {editing && (
+            <Polyline
+              key="editingPolyline"
+              coordinates={editing.coordinates}
+              strokeColor="#F00"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={1}
+            />
+          )}
+
+      </MapView>
+      <View style={styles.buttonContainer}>
+      {editing && (
+        <Pressable
+          onPress={() => finish()}
+          style={[styles.bubble, styles.button]}
+        >
+          <Text>Finish</Text>
+        </Pressable>
+      )}
+    </View>
+    </View>
   );
 }
 function DessertScreen (){

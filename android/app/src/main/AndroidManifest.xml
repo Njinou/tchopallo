@@ -2,6 +2,12 @@
   package="com.tchopallo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Added permissions -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Optional permissions -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -12,7 +18,7 @@
       android:theme="@style/AppTheme">
         <meta-data
           android:name="com.google.android.geo.API_KEY"
-          android:value=""/> 
+          android:value="AIzaSyAzALBkE87xzvfyhoyh-v70mlSj8XhpCf4"/> 
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
