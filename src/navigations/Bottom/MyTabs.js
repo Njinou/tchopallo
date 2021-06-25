@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput} from 'react-native';
+import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking} from 'react-native';
 import {View} from 'react-native';
 
 import React,{useState,useEffect} from 'react';
@@ -28,9 +28,8 @@ import MapView, { PROVIDER_GOOGLE,Marker, Polyline,Polygon } from 'react-native-
 
 
 import * as Location from 'expo-location';
-import Geolocation from 'react-native-geolocation-service';
-import MapViewDirections from 'react-native-maps-directions';
-import PlatformKey from '../../../keyas';
+
+import { WebView } from 'react-native-webview';
 
 /*
 2.5 farine... 1000 
@@ -559,11 +558,25 @@ function PlatScreen (){
   );
 }
 function DessertScreen (){
+
+  //google.navigation:q=latitude,longitude
+  const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?daddr=' });
+const latLng = `${37.3382082},${-121.8863286}`;
+const label = 'Tchopallo';
+const url = Platform.select({
+  ios: `${scheme}${label}@${latLng}`,
+  android: `${scheme}${latLng}(${label})`
+});
+Linking.addEventListener(url, (atl)=> console.log('console.logdadad ada dsda',atl));
+Linking.openURL(url); 
   return <Text> dessert is good for digestion... deal with it .........</Text>
 }
 
 function RaffraichissementScreen (){
-  return <Text> Douala is too hot... i need some drinks...... deal with it .........</Text>
+  return <WebView
+  source={{ uri: 'https://infinite.red' }}
+  style={{ marginTop: 20 }}
+/> 
 }
 
 function CocktailScreen (){
