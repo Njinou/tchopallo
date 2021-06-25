@@ -61,4 +61,4 @@ buck-out/
 config.js
 
 Keyas.js
-android/java_pid28936.hprof
+*.hprof
