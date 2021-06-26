@@ -380,10 +380,13 @@ PODS:
     - React-jsi (= 0.64.1)
     - React-perflogger (= 0.64.1)
   - React-jsinspector (0.64.1)
+<<<<<<< HEAD
   - react-native-geolocation (2.0.2):
     - React
   - react-native-geolocation-service (5.3.0-beta.1):
     - React
+=======
+>>>>>>> f96c490772d625c3051438cbceef30f6e568dab9
   - react-native-google-maps (0.29.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
@@ -570,8 +573,11 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+<<<<<<< HEAD
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
+=======
+>>>>>>> f96c490772d625c3051438cbceef30f6e568dab9
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -678,10 +684,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+<<<<<<< HEAD
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-geolocation-service:
     :path: "../node_modules/react-native-geolocation-service"
+=======
+>>>>>>> f96c490772d625c3051438cbceef30f6e568dab9
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -801,8 +810,11 @@ SPEC CHECKSUMS:
   React-jsi: 5de8204706bd872b78ea646aee5d2561ca1214b6
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
+<<<<<<< HEAD
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-geolocation-service: 4030de78cdeb93ebef1fdc1971668bea6c0bc59b
+=======
+>>>>>>> f96c490772d625c3051438cbceef30f6e568dab9
   react-native-google-maps: 54a19be628292d79d0aaec5277e97f6b17c158dd
   react-native-maps: e3dbe21292c4b611209e2ccf1b07db58568f66fc
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
@@ -842,6 +854,10 @@ SPEC CHECKSUMS:
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
+<<<<<<< HEAD
 PODFILE CHECKSUM: c9ca26995ef53ffc5f5ad87ebef7e3e60e417078
+=======
+PODFILE CHECKSUM: c7917a29275da85d8605ae9711bf13b6624c6ce5
+>>>>>>> f96c490772d625c3051438cbceef30f6e568dab9
 
 COCOAPODS: 1.10.1
