@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking} from 'react-native';
+import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList} from 'react-native';
 import {View} from 'react-native';
 
 import React,{useState,useEffect} from 'react';
@@ -26,11 +26,16 @@ import statuschecked from '../../ressources/Appicon/statuschecked.png';
 
 import MapView, { PROVIDER_GOOGLE,Marker, Polyline,Polygon } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
+import { createStackNavigator } from '@react-navigation/stack';
 
 import * as Location from 'expo-location';
 
 import { WebView } from 'react-native-webview';
 
+import donnee from '../../ressources/database/Keys.js'
+//PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
+
+//webview => 
 /*
 2.5 farine... 1000 
 levure 400
@@ -47,6 +52,7 @@ loyer 250 => 6000 francs.....  => 4000
 */
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
+import { CommonActions } from '@react-navigation/routers';
 //changer l'icone de plats chauds..
 // on peut regrouper dans raffraichissement  cocktail et jus/ biere ou liqueur 
 //amuse gueule... vienoiserie,....
@@ -114,22 +120,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
-  /*containera: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },*/
+
   containera: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
@@ -169,12 +160,33 @@ const styles = StyleSheet.create({
 
 const Tab = createBottomTabNavigator();
 
-function PdjScreen (){
+
+const Item = ({ title }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{title}</Text>
+  </View>
+);
+
+
+// picked doit etre  active seulemet quand on cliques le grand bouton et rien dautres.... et puis desactive quand cest le cas.. pour ce qui est de la quantite je crois que ca va
+// deja .... il faut juste ajuster le text qui va avec ...
+// plus ouvre un autre article....
+
+/*
+import React, { PureComponent } from 'react';
+class Post extends PureComponent {
+
+  render() { ... }
+}
+*/
+function PdjScreen (props){
+
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
   const [command,setCommand] = useState({});
   const [quantite,setQuantite]= useState(0);
-
+  const [itemSelected,setItemSelected] = useState({});
+  const [tester,setTester] = useState('JE ne crois pas ');
   const  filterObjects = (objects) =>{
     var filtered = {};
     var keys = Object.keys(objects);
@@ -189,115 +201,168 @@ function PdjScreen (){
         }
     }
     return filtered;
-}
+  }
 
+  const  CustomModal = ({item,props}) => (
+
+ <View style={styles.centeredView}>
+ <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+        if (itemAdded)  setModalVisible(!modalVisible);
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText,{fontSize:16,color:'#3F4D5F',textAlign:'center',marginTop:29,marginBottom:31}}>Choisissez la  Quantite!</Text>
+          <View style={{flexDirection:'row',backgroundColor:'#EAEAEA',marginBottom:40}}>
+            <Pressable onPress={async () => {
+              //let qte= quantite; qte>0? qte-- : console.log('la quantite est nulle'); setQuantite(qte);
+                
+                let commandTemp = command ? command : {};
+                let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE
+                
+                let NOUVELLEValue =  {quantite:  commandTemp[item.code] && commandTemp[item.code].quantite && commandTemp[item.code].quantite>1 ? commandTemp[item.code].quantite - 1 : 0  , picked: commandTemp[item.code] &&  commandTemp[item.code].picked,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+               //NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
+               if (NOUVELLEValue.quantite <1)  setModalVisible(false);
+                commandTemp[item.code] = NOUVELLEValue;
+                setCommand(filterObjects(commandTemp));
+                console.log(item.code);
+            }}>
+              <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
+                <Image source={moins}/>
+              </View>
+              </Pressable>
+
+            <View style={{backgroundColor:'#FFFFFF',alignItems:'center',justifyContent:'center',borderStyle:'solid',borderWidth:1,borderColor:'#EAEAEA'}}>
+                <Text style={{flex:1,fontWeight:'bold',color:'#3F4D5F',fontSize:16,paddingRight:17,paddingLeft:17,paddingBottom:10, paddingTop:11}}>
+                 {command[item.code]  &&   command[item.code].quantite}
+                </Text>
+            </View>
+            <Pressable onPress={ async () => {
+              //let qte= quantite; qte++; setQuantite(qte);
+              let commandTemp = command ? command : {};
+              let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE //commandTemp[item.code] &&  commandTemp[item.code].picked
+              
+              let NOUVELLEValue =  {quantite:  commandTemp[item.code] && commandTemp[item.code].quantite ? commandTemp[item.code].quantite + 1 : 1  , picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+             //setTimeout(function(){ alert("Hello"); }, 3000);
+             setModalVisible(false);
+
+              // NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
+              commandTemp[item.code] = NOUVELLEValue;
+              console.log('nouvelle command value...', command);
+              let result = filterObjects(commandTemp);
+              setCommand(result);
+
+              setTimeout(function(){  setModalVisible(true);}, 0);
+            }}>
+              <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
+                <Image source={plus}/>
+              </View>
+            </Pressable>
+        </View>
+          <Pressable
+            onPress={() => {
+              setModalVisible(!modalVisible);
+              //console.log("Set the value ....")
+              console.log('command',command);
+            }}
+          >
+            <View style={{backgroundColor:'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row',paddingLeft:112,paddingRight:124}}>
+                <Image source={Shape} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color: '#FFF',paddingTop:14,paddingBottom:15}}>{ 'Add to order' } </Text>
+            </View> 
+          </Pressable>
+        </View>
+      </View>
+    </Modal> 
+    </View>
+  ); // Render things inside the data
+
+
+const renderItem = ({ item }) => (
+  <>
+  <ScrollView>
+  <View style={{flex:0.80,marginTop:5}}>
+      <View style={{backgroundColor:'transparent',flex:1,paddingLeft:22, paddingRight:22
+      }}>
+        <Image style={{width: undefined, height: 50, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,
+        
+        }} resizeMode="cover" source={{
+            uri: 'https://reactnative.dev/img/tiny_logo.png',
+          }} 
+        />
+      </View>
+      <View style={{flex:1,paddingLeft:22, paddingRight:22,
+      // shadowOffset: {width:0, height: '2px'}, shadowRadius:'10px', shadowOpacity:10 , shadowColor: 'rgba(170,170,170,0.5)',elevation:5
+      shadowColor: 'rgba(170,170,170,0.5)',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,  
+      elevation: 5,
+     // marginLeft:39,
+      //marginRight:36,
+      borderBottomEndRadius:8,borderBottomStartRadius:8
+      }}>
+        <Text style={{fontSize:16, color:'#3F4D5F',marginBottom:10,marginTop:20,paddingLeft:17,paddingRight:15}}>
+            {item.name}
+          </Text>
+          <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
+              $10.00
+          </Text>
+          <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
+          Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
+          </Text>
+          <Pressable onPress={ () => {
+            let commandTemp = command ? command : {};
+            let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE
+            let NOUVELLEValue =  {quantite:  elmt.quantite ? 0: 1 , picked: command[item.code]? !command[item.code].picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+            commandTemp[item.code] = NOUVELLEValue;
+            setItemSelected(item);
+             setCommand(filterObjects(commandTemp));
+            NOUVELLEValue.picked   && NOUVELLEValue.quantite? setModalVisible(true): setModalVisible(false);
+
+            }}>
+            <View style={{backgroundColor: command[item.code] ?'#D5D952':'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
+              <Image source={command[item.code]?addedgreen:  Shape} style={{marginRight:6}}/>
+              <Text style={{fontSize:12,color:command[item.code]? '#585B00': '#FFF',paddingTop:14,paddingBottom:15}}>{command[item.code]? 'item added to order':  'Add to order' } </Text>
+            </View> 
+          </Pressable>
+        </View>
+  </View>
+</ScrollView> 
+ </>
+);
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
-    <ScrollView>
-    <View style={{flex:0.80,marginTop:5}}>
-        <View style={{backgroundColor:'transparent',flex:1,paddingLeft:22, paddingRight:22
-        }}>
-          <Image style={{width: undefined, height: 50, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,
-          
-          }} resizeMode="cover" source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
-            }} 
-          />
-        </View>
-        <View style={{flex:1,paddingLeft:22, paddingRight:22,
-        // shadowOffset: {width:0, height: '2px'}, shadowRadius:'10px', shadowOpacity:10 , shadowColor: 'rgba(170,170,170,0.5)',elevation:5
-        shadowColor: 'rgba(170,170,170,0.5)',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5,
-       // marginLeft:39,
-        //marginRight:36,
-        borderBottomEndRadius:8,borderBottomStartRadius:8
-        }}>
-          <Text style={{fontSize:16, color:'#3F4D5F',marginBottom:10,marginTop:20,paddingLeft:17,paddingRight:15}}>
-              Vegan Lentil Quinoa Broth Bowl
-            </Text>
-            <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
-                $10.00
-            </Text>
-            <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
-            Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
-            </Text>
-            <Pressable onPress={() => {addItem(!itemAdded);
-                                        itemAdded ? setModalVisible(false): setModalVisible(true);
-                                        setQuantite(1);
-              }}>
-              <View style={{backgroundColor:itemAdded?'#D5D952':'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
-                <Image source={itemAdded?addedgreen:  Shape} style={{marginRight:6}}/>
-                <Text style={{fontSize:12,color:itemAdded? '#585B00': '#FFF',paddingTop:14,paddingBottom:15}}>{itemAdded? 'item added to order':  'Add to order' } </Text>
-              </View> 
-            </Pressable>
-          </View>
-    </View>
-  </ScrollView> 
-
-   <View style={styles.centeredView}>
-   <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          if (itemAdded)  setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText,{fontSize:16,color:'#3F4D5F',textAlign:'center',marginTop:29,marginBottom:31}}>Choisissez la  Quantite!</Text>
-            <View style={{flexDirection:'row',backgroundColor:'#EAEAEA',marginBottom:40}}>
-              <Pressable onPress={() => {let qte= quantite; qte>0? qte-- : console.log('la quantite est nulle'); setQuantite(qte);}}>
-                <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
-                  <Image source={moins}/>
-                </View>
-                </Pressable>
-
-              <View style={{backgroundColor:'#FFFFFF',alignItems:'center',justifyContent:'center',borderStyle:'solid',borderWidth:1,borderColor:'#EAEAEA'}}>
-                  <Text style={{fontWeight:'bold',color:'#3F4D5F',fontSize:16,paddingRight:17,paddingLeft:17,paddingBottom:10, paddingTop:11}}>
-                    { quantite}
-                  </Text>
-              </View>
-              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);}}>
-                <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
-                  <Image source={plus}/>
-                </View>
-              </Pressable>
-          </View>
-            <Pressable
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <View style={{backgroundColor:'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row',paddingLeft:112,paddingRight:124}}>
-                  <Image source={Shape} style={{marginRight:6}}/>
-                  <Text style={{fontSize:12,color: '#FFF',paddingTop:14,paddingBottom:15}}>{ 'Add to order' } </Text>
-              </View> 
-            </Pressable>
-          </View>
-        </View>
-      </Modal> 
-      </View>
-      <View style={{marginTop:'auto'}}>
-   <Pressable
-        onPress={() => {
-          console.log("pressed");
-        }}
-        style={[
-          styles.wrapperCustom,
-          {
-            backgroundColor: quantite<1?'#C3C1C1':'#F23445'
-          },
-          
-        ]}>
-          {quantite<1? <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}> Selectionnez un plat</Text>:
-          <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}>
-            {'(1) or number of items '}Continue to Order 
-          </Text>}
-      </Pressable>
-   </View> 
+      <FlatList
+        data={donnee.pdj.local}
+        renderItem={renderItem}
+        keyExtractor={item => item.code}
+      />
+      <CustomModal item={itemSelected} />
+    <View style={{marginTop:'auto'}}>
+ <Pressable
+      onPress={() => {
+        props.navigation.navigate('Cocktail')
+        console.log("pressed");
+      }}
+      style={[
+        styles.wrapperCustom,
+        {
+          backgroundColor: quantite<1?'#C3C1C1':'#F23445'
+        },
+        
+      ]}>
+        {quantite<1? <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}> Selectionnez un plat</Text>:
+        <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}>
+          {'(1) or number of items '}Continue to Order 
+        </Text>}
+    </Pressable>
+ </View> 
   </View>
   );
 }
@@ -714,7 +779,8 @@ function CocktailScreen (){
                     { quantite}
                   </Text>
               </View>
-              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);}}>
+              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);
+              }}>
                 <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
                   <Image source={plus}/>
                 </View>
@@ -805,7 +871,7 @@ function CocktailScreen (){
      
     backgroundColor: "white",
     borderRadius: 8,
-    
+    justifyContent:'center',
     alignItems: "center",
     shadowColor: "rgba(170,170,170,0.5)",
     shadowOffset: {
@@ -815,7 +881,7 @@ function CocktailScreen (){
     shadowOpacity: 10,
     shadowRadius: 4,
     elevation: 5}}>
-        <Text style={{color:'#F23445',paddingBottom:20, paddingTop:25,marginLeft:-60,fontSize:16}}>Auriez vous des instrucstions Speciales pour la confection de votre plat?</Text>
+        <Text style={{color:'#F23445',paddingBottom:20, paddingTop:25,fontSize:16,textAlign:'center',position:'relative'}}>Auriez vous des instrucstions Speciales pour la confection de votre plat?</Text>
         <TextInput multiline={true} placeholder="Entrez les instrutions ici" onChangeText={(val)=>console.log(val)} style={{opacity:0.6,borderRadius:3,backgroundColor:'#FFF', borderStyle:'solid',borderColor:'#DBDBDB',borderWidth:1.5,alignSelf:'stretch',marginLeft:45,marginRight:45,marginBottom:20,padding:10}}/>
     </View>
 
@@ -842,6 +908,9 @@ function CocktailScreen (){
 }
 
 
+const Stack = createStackNavigator();
+//Tab.Navigator
+//Tab.Screen
 function MyTabs() {
   return (
     <Tab.Navigator 
@@ -860,7 +929,8 @@ function MyTabs() {
       }}
     > 
     
-      <Tab.Screen name="Pdj" component={PdjScreen}  
+      <Tab.Screen 
+      name="Pdj" component={PdjScreen}  
         options={{
           tabBarLabel: 'PDJ',
           tabBarIcon: () => (
