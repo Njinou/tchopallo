@@ -307,12 +307,15 @@ const renderItem = ({ item }) => (
 );
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
-      <FlatList
-        
-        data={props.data? props.data: pdjeuner}
-        renderItem={renderItem}
-        keyExtractor={item => item.code}
-      />
+      
+      <SectionList
+    sections={pdjeuner}
+    keyExtractor={(item, index) => item + index}
+    renderItem={renderItem}
+     renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+      backgroundColor: "#fff",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
+  />
+
       <CustomModal item={itemSelected} />
     <View style={{marginTop:'auto'}}>
  <Pressable
