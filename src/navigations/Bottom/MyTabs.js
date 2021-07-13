@@ -38,29 +38,12 @@ import { WebView } from 'react-native-webview';
 import donnee,{pdjeuner} from '../../ressources/database/Keys.js'
 
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
+//  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
 
-//webview => 
-/*
-2.5 farine... 1000 
-levure 400
-sucre 500
-sel 10 francs 
-huile de friture 1500 
-haricot 500
-condiments 100 
-Bouillie 300 
-sucre bouillie 400 
-Salaire (70+40)/(30*4) = ((70+40)/30 )/4 => 915
-loyer 250 => 6000 francs.....  => 4000
-10.5000]
-*/
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
 import { CommonActions } from '@react-navigation/routers';
-//changer l'icone de plats chauds..
-// on peut regrouper dans raffraichissement  cocktail et jus/ biere ou liqueur 
-//amuse gueule... vienoiserie,....
-//repas; on met entree plats chauds.... desserts 
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
@@ -162,20 +145,7 @@ const styles = StyleSheet.create({
   
 });
 
-const Tab = createBottomTabNavigator();
-
-// picked doit etre  active seulemet quand on cliques le grand bouton et rien dautres.... et puis desactive quand cest le cas.. pour ce qui est de la quantite je crois que ca va
-// deja .... il faut juste ajuster le text qui va avec ...
-// plus ouvre un autre article....
-
-/*
-import React, { PureComponent } from 'react';
-class Post extends PureComponent {
-
-  render() { ... }
-}
-*/
-function PdjScreen (props){
+function HomeScreen (props){
   const {order} = useContext(ThingsContext);
   const {toggleTheme} = useContext(ThingsContext);
 
@@ -347,7 +317,7 @@ const renderItem = ({ item }) => (
     <View style={{marginTop:'auto'}}>
  <Pressable
       onPress={() => {
-        props.navigation.navigate('Cocktail')
+        props.navigation.navigate('Detail de la Commande')
         console.log("pressed");
       }}
       style={[
@@ -405,14 +375,14 @@ function OrderDelivery (){
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
 
-function EntreeScreen (props){
+function OrderConfirmationScreen (props){
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
       <Image source={confirmationGreen} style={{marginBottom:29,marginTop:'auto'}}/>
       <Text style={{color:'#3F4D5F',fontSize:20, textAlign:'center',paddingBottom:10}} >Merci Pour votre Commande! </Text>
       <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center',paddingLeft:62,paddingRight:61,marginBottom:'auto'}}> Votre repas est en cours de preparation. Vous pouvez controller l'Etat de votre commande dans la rubique historique des commandes </Text>
       <View style={{alignItems:'flex-end'}}>
-        <Pressable onPress={()=>props.navigation.navigate('Vienoiserie')}>
+        <Pressable onPress={()=>props.navigation.navigate('Order Status')}>
           <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
         </Pressable>
       </View>
@@ -423,7 +393,7 @@ function EntreeScreen (props){
 
 }
 ////   Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
-function VienoiserieScreen (props){
+function OrderStatuScreen (props){
   return (
     <View style={{flex:1}}>
         <View style={{flex:1.20,backgroundColor:'#FAFAFA',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',justifyContent:'center',}}>
@@ -479,7 +449,7 @@ function VienoiserieScreen (props){
             <View style={{borderTopWidth:2,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
              
               <View style={{borderRightWidth:1,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,backgroundColor:'#FFF'}}>
-                <Pressable onPress={()=> props.navigation.navigate('Plat Chauds')}>
+                <Pressable onPress={()=> props.navigation.navigate('Tracking Order')}>
                   <Text style={{color:'#F23445',fontSize:12,textAlign:'center'}}>
                       Map View
                   </Text>
@@ -521,7 +491,7 @@ function VienoiserieScreen (props){
   );
 }
 
-function PlatScreen (){
+function TrackingMapScreen (){
   const [position, setPosition] = useState({
     latitude: 10,
     longitude: 10,
@@ -669,7 +639,7 @@ function RaffraichissementScreen (){
 /> 
 }
 
-function CocktailScreen (props){
+function OrderDetailScreen (props){
   const [quantite,setQuantite]= useState(0);
   const [date, setDate] = useState(new Date(Date.now()));
   const [mode, setMode] = useState('date');
@@ -911,7 +881,7 @@ function CocktailScreen (props){
 
     <Pressable
         onPress={() => {
-          props.navigation.navigate('Entrees');
+          props.navigation.navigate('Order Confirmation');
         }}
         style={[
           {
@@ -932,15 +902,16 @@ function CocktailScreen (props){
 
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 //Tab.Navigator
 //Tab.Screen
 function MyTabs() {
   return (
-    <Tab.Navigator 
+    <Stack.Navigator 
       screenOptions ={{
         borderRadius:5
       }}
-      initialRouteName="Pdj"
+      initialRouteName="Home"
       tabBarOptions={{
         activeColor :"#f0edf6",
         activeTintColor: 'tomato',
@@ -952,10 +923,10 @@ function MyTabs() {
       }}
     > 
     
-      <Tab.Screen 
-      name="Pdj" component={PdjScreen}  
+      <Stack.Screen 
+      name="Home" component={HomeScreen}  
         options={{
-          tabBarLabel: 'PDJ',
+          tabBarLabel: 'Home',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -965,9 +936,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Entrees" component={EntreeScreen} 
+      <Stack.Screen name="Order Confirmation" component={OrderConfirmationScreen}  
         options={{
-          tabBarLabel: 'Entrees',
+          tabBarLabel: 'Confirmation de la Commande ',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -977,9 +948,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Vienoiserie" component={VienoiserieScreen} 
-        options={{
-          tabBarLabel: 'Vienoiserie',
+      <Stack.Screen name="Order Status" component={OrderStatuScreen}
+        options={{ 
+          tabBarLabel: 'Etat de la Commande',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -989,9 +960,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Plat Chauds" component={PlatScreen}  
+      <Stack.Screen name="Tracking Order" component={TrackingMapScreen}  
         options={{
-          tabBarLabel: 'Plats Chauds',
+          tabBarLabel: 'Position de ma commande',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -1001,7 +972,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Desserts" component={DessertScreen}  
+      <Stack.Screen name="Desserts" component={DessertScreen}  
         options={{
           tabBarLabel: 'Desserts',
           tabBarIcon: () => (
@@ -1013,7 +984,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Raffraichissement" component={RaffraichissementScreen}  
+      <Stack.Screen name="Raffraichissement" component={RaffraichissementScreen}  
         options={{
           tabBarLabel: 'Raffraichissements',
           tabBarIcon: () => (
@@ -1025,11 +996,11 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Cocktail"
-        component={CocktailScreen}
+      <Stack.Screen
+        name="Detail de la Commande"
+        component={OrderDetailScreen}
         options={{
-          tabBarLabel: 'Cocktail',
+          tabBarLabel: 'Details',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -1039,21 +1010,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Cart"
-        component={CartScreen}
-        options={{
-          tabBarLabel: 'Cart',
-          tabBarIcon: () => (
-            <Image
-              fadeDuration={0}
-              style={{width: 22, height: 22}}
-              source={cocktail}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 }
 export default MyTabs;
