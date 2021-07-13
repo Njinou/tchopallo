@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking} from 'react-native';
+import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
 import {View} from 'react-native';
 
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import pdj from '../../ressources/images/pdj.png';
 import entree from '../../ressources/images/entree.jpeg';
 import raffraichissement from  '../../ressources/images/raffraichissement.jpeg';
@@ -24,33 +24,26 @@ import line10 from '../../ressources/Appicon/line10.png';
 import Line10grey from '../../ressources/Appicon/Line10grey.png';
 import statuschecked from '../../ressources/Appicon/statuschecked.png';
 
+import ThingsContext from '../../../thingsContext';
+
+
 import MapView, { PROVIDER_GOOGLE,Marker, Polyline,Polygon } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
+import { createStackNavigator } from '@react-navigation/stack';
 
 import * as Location from 'expo-location';
 
 import { WebView } from 'react-native-webview';
 
-/*
-2.5 farine... 1000 
-levure 400
-sucre 500
-sel 10 francs 
-huile de friture 1500 
-haricot 500
-condiments 100 
-Bouillie 300 
-sucre bouillie 400 
-Salaire (70+40)/(30*4) = ((70+40)/30 )/4 => 915
-loyer 250 => 6000 francs.....  => 4000
-10.5000]
-*/
+import donnee,{pdjeuner} from '../../ressources/database/Keys.js'
+
+//PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
+//  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
-//changer l'icone de plats chauds..
-// on peut regrouper dans raffraichissement  cocktail et jus/ biere ou liqueur 
-//amuse gueule... vienoiserie,....
-//repas; on met entree plats chauds.... desserts 
+import { CommonActions } from '@react-navigation/routers';
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
@@ -114,22 +107,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
-  /*containera: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },*/
+
   containera: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
@@ -167,14 +145,17 @@ const styles = StyleSheet.create({
   
 });
 
-const Tab = createBottomTabNavigator();
+function HomeScreen (props){
+  const {order} = useContext(ThingsContext);
+  const {toggleTheme} = useContext(ThingsContext);
 
-function PdjScreen (){
+
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
   const [command,setCommand] = useState({});
   const [quantite,setQuantite]= useState(0);
-
+  const [itemSelected,setItemSelected] = useState({});
+  const [tester,setTester] = useState('JE ne crois pas ');
   const  filterObjects = (objects) =>{
     var filtered = {};
     var keys = Object.keys(objects);
@@ -189,118 +170,192 @@ function PdjScreen (){
         }
     }
     return filtered;
-}
+  }
 
+  const  CustomModal = ({item}) => (
+  
+ <View style={styles.centeredView}>
+ <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+        if (itemAdded)  setModalVisible(!modalVisible);
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText,{fontSize:16,color:'#3F4D5F',textAlign:'center',marginTop:29,marginBottom:31}}>Choisissez la  Quantite!</Text>
+          <View style={{flexDirection:'row',backgroundColor:'#EAEAEA',marginBottom:40}}>
+            <Pressable onPress={async () => {
+              //let qte= quantite; qte>0? qte-- : console.log('la quantite est nulle'); setQuantite(qte);
+                
+                let commandTemp = command ? command : {};
+                let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE
+                
+                let NOUVELLEValue =  {quantite:  commandTemp[item.code] && commandTemp[item.code].quantite && commandTemp[item.code].quantite>1 ? commandTemp[item.code].quantite - 1 : 0  , picked: commandTemp[item.code] &&  commandTemp[item.code].picked,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+               //NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
+               if (NOUVELLEValue.quantite <1)  setModalVisible(false);
+                commandTemp[item.code] = NOUVELLEValue;
+                setCommand(filterObjects(commandTemp));
+                toggleTheme(filterObjects(commandTemp));
+               // console.log(item.code);
+            }}>
+              <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
+                <Image source={moins}/>
+              </View>
+              </Pressable>
+
+            <View style={{backgroundColor:'#FFFFFF',alignItems:'center',justifyContent:'center',borderStyle:'solid',borderWidth:1,borderColor:'#EAEAEA'}}>
+                <Text style={{flex:1,fontWeight:'bold',color:'#3F4D5F',fontSize:16,paddingRight:17,paddingLeft:17,paddingBottom:10, paddingTop:11}}>
+                 {command[item.code]  &&   command[item.code].quantite}
+                </Text>
+            </View>
+            <Pressable onPress={ async () => {
+              //let qte= quantite; qte++; setQuantite(qte);
+              let commandTemp = command ? command : {};
+              let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE //commandTemp[item.code] &&  commandTemp[item.code].picked
+              
+              let NOUVELLEValue =  {quantite:  commandTemp[item.code] && commandTemp[item.code].quantite ? commandTemp[item.code].quantite + 1 : 1  , picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+             //setTimeout(function(){ alert("Hello"); }, 3000);
+             setModalVisible(false);
+
+              // NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
+              commandTemp[item.code] = NOUVELLEValue;
+              console.log('nouvelle command value...', command);
+              let result = filterObjects(commandTemp);
+              setCommand(result);
+              toggleTheme(result);
+              setTimeout(function(){  setModalVisible(true);}, 0);
+            }}>
+              <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
+                <Image source={plus}/>
+              </View>
+            </Pressable>
+        </View>
+          <Pressable
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={{backgroundColor:'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row',paddingLeft:112,paddingRight:124}}>
+                <Image source={Shape} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color: '#FFF',paddingTop:14,paddingBottom:15}}>{ 'Add to order' } </Text>
+            </View> 
+          </Pressable>
+        </View>
+      </View>
+    </Modal> 
+    </View>
+  );
+
+
+const renderItem = ({ item }) => (
+  <>
+  <ScrollView>
+  <View style={{flex:0.80,marginTop:5}}>
+      <View style={{backgroundColor:'transparent',flex:1,paddingLeft:22, paddingRight:22
+      }}>
+        <Image style={{width: undefined, height: 50, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,
+        
+        }} resizeMode="cover" source={{
+            uri: 'https://reactnative.dev/img/tiny_logo.png',
+          }} 
+        />
+      </View>
+      <View style={{flex:1,paddingLeft:22, paddingRight:22,
+      // shadowOffset: {width:0, height: '2px'}, shadowRadius:'10px', shadowOpacity:10 , shadowColor: 'rgba(170,170,170,0.5)',elevation:5
+      shadowColor: 'rgba(170,170,170,0.5)',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,  
+      elevation: 5,
+     // marginLeft:39,
+      //marginRight:36,
+      borderBottomEndRadius:8,borderBottomStartRadius:8
+      }}>
+        <Text style={{fontSize:16, color:'#3F4D5F',marginBottom:10,marginTop:20,paddingLeft:17,paddingRight:15}}>
+            {item.name}
+          </Text>
+          <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
+              $10.00
+          </Text>
+          <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
+          Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
+          </Text>
+          <Pressable onPress={ () => {
+            let commandTemp = command ? command : {};
+            let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE
+            //"item": {"category": "pdj", "code": "bhb", "description": "Beignets + Haricot + Bouilie", "name": "Beignets-Haricots-Bouillie", "prix": 500, "souscategory": "local", "stock": 7}
+            let NOUVELLEValue =  {quantite:  elmt.quantite ? 0: 1 , picked: command[item.code]? !command[item.code].picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo",category: item.category, code:  item.code, description:item.description, name: item.name, prix: item.prix, souscategory:item.souscategory,}; 
+            commandTemp[item.code] = NOUVELLEValue;
+            setItemSelected(item);
+             setCommand(filterObjects(commandTemp));
+            NOUVELLEValue.picked   && NOUVELLEValue.quantite? setModalVisible(true): setModalVisible(false);
+            toggleTheme(filterObjects(commandTemp));
+            }}>
+            <View style={{backgroundColor: command[item.code] ?'#D5D952':'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
+              <Image source={command[item.code]?addedgreen:  Shape} style={{marginRight:6}}/>
+              <Text style={{fontSize:12,color:command[item.code]? '#585B00': '#FFF',paddingTop:14,paddingBottom:15}}>{command[item.code]? 'item added to order':  'Add to order' } </Text>
+            </View> 
+          </Pressable>
+        </View>
+  </View>
+</ScrollView> 
+ </>
+);
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
-    <ScrollView>
-    <View style={{flex:0.80,marginTop:5}}>
-        <View style={{backgroundColor:'transparent',flex:1,paddingLeft:22, paddingRight:22
-        }}>
-          <Image style={{width: undefined, height: 50, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,
-          
-          }} resizeMode="cover" source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
-            }} 
-          />
-        </View>
-        <View style={{flex:1,paddingLeft:22, paddingRight:22,
-        // shadowOffset: {width:0, height: '2px'}, shadowRadius:'10px', shadowOpacity:10 , shadowColor: 'rgba(170,170,170,0.5)',elevation:5
-        shadowColor: 'rgba(170,170,170,0.5)',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
-        elevation: 5,
-       // marginLeft:39,
-        //marginRight:36,
-        borderBottomEndRadius:8,borderBottomStartRadius:8
-        }}>
-          <Text style={{fontSize:16, color:'#3F4D5F',marginBottom:10,marginTop:20,paddingLeft:17,paddingRight:15}}>
-              Vegan Lentil Quinoa Broth Bowl
-            </Text>
-            <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
-                $10.00
-            </Text>
-            <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
-            Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
-            </Text>
-            <Pressable onPress={() => {addItem(!itemAdded);
-                                        itemAdded ? setModalVisible(false): setModalVisible(true);
-                                        setQuantite(1);
-              }}>
-              <View style={{backgroundColor:itemAdded?'#D5D952':'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
-                <Image source={itemAdded?addedgreen:  Shape} style={{marginRight:6}}/>
-                <Text style={{fontSize:12,color:itemAdded? '#585B00': '#FFF',paddingTop:14,paddingBottom:15}}>{itemAdded? 'item added to order':  'Add to order' } </Text>
-              </View> 
-            </Pressable>
-          </View>
-    </View>
-  </ScrollView> 
-
-   <View style={styles.centeredView}>
-   <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          if (itemAdded)  setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText,{fontSize:16,color:'#3F4D5F',textAlign:'center',marginTop:29,marginBottom:31}}>Choisissez la  Quantite!</Text>
-            <View style={{flexDirection:'row',backgroundColor:'#EAEAEA',marginBottom:40}}>
-              <Pressable onPress={() => {let qte= quantite; qte>0? qte-- : console.log('la quantite est nulle'); setQuantite(qte);}}>
-                <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
-                  <Image source={moins}/>
-                </View>
-                </Pressable>
-
-              <View style={{backgroundColor:'#FFFFFF',alignItems:'center',justifyContent:'center',borderStyle:'solid',borderWidth:1,borderColor:'#EAEAEA'}}>
-                  <Text style={{fontWeight:'bold',color:'#3F4D5F',fontSize:16,paddingRight:17,paddingLeft:17,paddingBottom:10, paddingTop:11}}>
-                    { quantite}
-                  </Text>
-              </View>
-              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);}}>
-                <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
-                  <Image source={plus}/>
-                </View>
-              </Pressable>
-          </View>
-            <Pressable
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <View style={{backgroundColor:'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row',paddingLeft:112,paddingRight:124}}>
-                  <Image source={Shape} style={{marginRight:6}}/>
-                  <Text style={{fontSize:12,color: '#FFF',paddingTop:14,paddingBottom:15}}>{ 'Add to order' } </Text>
-              </View> 
-            </Pressable>
-          </View>
-        </View>
-      </Modal> 
-      </View>
-      <View style={{marginTop:'auto'}}>
-   <Pressable
-        onPress={() => {
-          console.log("pressed");
-        }}
-        style={[
-          styles.wrapperCustom,
-          {
-            backgroundColor: quantite<1?'#C3C1C1':'#F23445'
-          },
-          
-        ]}>
-          {quantite<1? <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}> Selectionnez un plat</Text>:
-          <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}>
-            {'(1) or number of items '}Continue to Order 
-          </Text>}
-      </Pressable>
-   </View> 
+      <FlatList
+        
+        data={props.data? props.data: pdjeuner}
+        renderItem={renderItem}
+        keyExtractor={item => item.code}
+      />
+      <CustomModal item={itemSelected} />
+    <View style={{marginTop:'auto'}}>
+ <Pressable
+      onPress={() => {
+        props.navigation.navigate('Detail de la Commande')
+        console.log("pressed");
+      }}
+      style={[
+        styles.wrapperCustom,
+        {
+          backgroundColor: quantite<1?'#C3C1C1':'#F23445'
+        },
+        
+      ]}>
+        {quantite<1? <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}> Selectionnez un plat</Text>:
+        <Text style={{fontSize:18, color:'#FFF',paddingTop:14,paddingBottom:12}}>
+          {'(1) or number of items '}Continue to Order 
+        </Text>}
+    </Pressable>
+ </View> 
   </View>
   );
 }
+
+export function CartScreen (){
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{typeof(title) ==='string'? title:title.name + " here is the name"}</Text>
+    </View>
+  );
+  const {groupList} = useContext(ThingsContext);
+  
+  return (
+    <SectionList
+    sections={groupList}
+    keyExtractor={(item, index) => item + index}
+    renderItem={({ item }) => <Item title={item} />}
+     renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+      backgroundColor: "#fff"}}>{section.title}</Text>}
+  />
+  );
+}
+
 function OrderDelivery (){
   return (
     <View style={styles.container}>
@@ -317,17 +372,19 @@ function OrderDelivery (){
     </MapView>
   </View>
   );
-
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
-function EntreeScreen (){
+
+function OrderConfirmationScreen (props){
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
       <Image source={confirmationGreen} style={{marginBottom:29,marginTop:'auto'}}/>
       <Text style={{color:'#3F4D5F',fontSize:20, textAlign:'center',paddingBottom:10}} >Merci Pour votre Commande! </Text>
       <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center',paddingLeft:62,paddingRight:61,marginBottom:'auto'}}> Votre repas est en cours de preparation. Vous pouvez controller l'Etat de votre commande dans la rubique historique des commandes </Text>
       <View style={{alignItems:'flex-end'}}>
-        <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+        <Pressable onPress={()=>props.navigation.navigate('Order Status')}>
+          <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+        </Pressable>
       </View>
       
     </View>
@@ -335,7 +392,8 @@ function EntreeScreen (){
   );
 
 }
-function VienoiserieScreen (){
+////   Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
+function OrderStatuScreen (props){
   return (
     <View style={{flex:1}}>
         <View style={{flex:1.20,backgroundColor:'#FAFAFA',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',justifyContent:'center',}}>
@@ -389,12 +447,15 @@ function VienoiserieScreen (){
                </View>
             </ScrollView>
             <View style={{borderTopWidth:2,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{borderRightWidth:1,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,backgroundColor:'#FFF'}}>
+             
+              <View style={{borderRightWidth:1,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,backgroundColor:'#FFF'}}>
+                <Pressable onPress={()=> props.navigation.navigate('Tracking Order')}>
                   <Text style={{color:'#F23445',fontSize:12,textAlign:'center'}}>
                       Map View
                   </Text>
-                </View>
-
+                  </Pressable>
+              </View>
+                
                 <View style={{backgroundColor:'#FFF',flex:1}}>
                   <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center'}}>
                         Live Video
@@ -420,18 +481,17 @@ function VienoiserieScreen (){
                   </View>
                  
               </View>
-              <View style={{marginTop:'auto',marginBottom:19,marginLeft:24,flexDirection:'row',alignItems:'center'}}>
+              <View style={{marginTop:'auto',marginBottom:19,marginLeft:'auto',marginRight:'auto',flexDirection:'row',alignItems:'center'}}>
                 <Image source={checkgreen} style={{marginRight:2}}/>
                 <Text style={{fontSize:12,color:'#A4A726'}}> Livré !</Text>
               </View>
-              
         </View>
 
     </View>
   );
 }
 
-function PlatScreen (){
+function TrackingMapScreen (){
   const [position, setPosition] = useState({
     latitude: 10,
     longitude: 10,
@@ -579,8 +639,7 @@ function RaffraichissementScreen (){
 /> 
 }
 
-function CocktailScreen (){
-
+function OrderDetailScreen (props){
   const [quantite,setQuantite]= useState(0);
   const [date, setDate] = useState(new Date(Date.now()));
   const [mode, setMode] = useState('date');
@@ -714,7 +773,8 @@ function CocktailScreen (){
                     { quantite}
                   </Text>
               </View>
-              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);}}>
+              <Pressable onPress={() => {let qte= quantite; qte++; setQuantite(qte);
+              }}>
                 <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
                   <Image source={plus}/>
                 </View>
@@ -805,7 +865,7 @@ function CocktailScreen (){
      
     backgroundColor: "white",
     borderRadius: 8,
-    
+    justifyContent:'center',
     alignItems: "center",
     shadowColor: "rgba(170,170,170,0.5)",
     shadowOffset: {
@@ -815,14 +875,13 @@ function CocktailScreen (){
     shadowOpacity: 10,
     shadowRadius: 4,
     elevation: 5}}>
-        <Text style={{color:'#F23445',paddingBottom:20, paddingTop:25,marginLeft:-60,fontSize:16}}>Auriez vous des instrucstions Speciales pour la confection de votre plat?</Text>
+        <Text style={{color:'#F23445',paddingBottom:20, paddingTop:25,fontSize:16,textAlign:'center',position:'relative'}}>Auriez vous des instrucstions Speciales pour la confection de votre plat?</Text>
         <TextInput multiline={true} placeholder="Entrez les instrutions ici" onChangeText={(val)=>console.log(val)} style={{opacity:0.6,borderRadius:3,backgroundColor:'#FFF', borderStyle:'solid',borderColor:'#DBDBDB',borderWidth:1.5,alignSelf:'stretch',marginLeft:45,marginRight:45,marginBottom:20,padding:10}}/>
     </View>
 
-
     <Pressable
         onPress={() => {
-          console.log("pressed");
+          props.navigation.navigate('Order Confirmation');
         }}
         style={[
           {
@@ -842,13 +901,17 @@ function CocktailScreen (){
 }
 
 
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+//Tab.Navigator
+//Tab.Screen
 function MyTabs() {
   return (
-    <Tab.Navigator 
+    <Stack.Navigator 
       screenOptions ={{
         borderRadius:5
       }}
-      initialRouteName="Pdj"
+      initialRouteName="Home"
       tabBarOptions={{
         activeColor :"#f0edf6",
         activeTintColor: 'tomato',
@@ -860,9 +923,10 @@ function MyTabs() {
       }}
     > 
     
-      <Tab.Screen name="Pdj" component={PdjScreen}  
+      <Stack.Screen 
+      name="Home" component={HomeScreen}  
         options={{
-          tabBarLabel: 'PDJ',
+          tabBarLabel: 'Home',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -872,9 +936,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Entrees" component={EntreeScreen} 
+      <Stack.Screen name="Order Confirmation" component={OrderConfirmationScreen}  
         options={{
-          tabBarLabel: 'Entrees',
+          tabBarLabel: 'Confirmation de la Commande ',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -884,9 +948,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Vienoiserie" component={VienoiserieScreen} 
-        options={{
-          tabBarLabel: 'Vienoiserie',
+      <Stack.Screen name="Order Status" component={OrderStatuScreen}
+        options={{ 
+          tabBarLabel: 'Etat de la Commande',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -896,9 +960,9 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Plat Chauds" component={PlatScreen}  
+      <Stack.Screen name="Tracking Order" component={TrackingMapScreen}  
         options={{
-          tabBarLabel: 'Plats Chauds',
+          tabBarLabel: 'Position de ma commande',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -908,7 +972,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Desserts" component={DessertScreen}  
+      <Stack.Screen name="Desserts" component={DessertScreen}  
         options={{
           tabBarLabel: 'Desserts',
           tabBarIcon: () => (
@@ -920,7 +984,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen name="Raffraichissement" component={RaffraichissementScreen}  
+      <Stack.Screen name="Raffraichissement" component={RaffraichissementScreen}  
         options={{
           tabBarLabel: 'Raffraichissements',
           tabBarIcon: () => (
@@ -932,11 +996,11 @@ function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Cocktail"
-        component={CocktailScreen}
+      <Stack.Screen
+        name="Detail de la Commande"
+        component={OrderDetailScreen}
         options={{
-          tabBarLabel: 'Cocktail',
+          tabBarLabel: 'Details',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}
@@ -946,7 +1010,7 @@ function MyTabs() {
           ),
         }}
       />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 }
 export default MyTabs;

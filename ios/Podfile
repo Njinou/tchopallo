@@ -37,8 +37,8 @@ pod 'react-native-webview', :path => '../node_modules/react-native-webview'
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
-
+  #use_flipper!()
+  use_flipper!({ 'Flipper' => '0.75.0' })
   post_install do |installer|
     react_native_post_install(installer)
   end
