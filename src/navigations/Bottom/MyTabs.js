@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList} from 'react-native';
+import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
 import {View} from 'react-native';
 
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import pdj from '../../ressources/images/pdj.png';
 import entree from '../../ressources/images/entree.jpeg';
 import raffraichissement from  '../../ressources/images/raffraichissement.jpeg';
@@ -24,6 +24,9 @@ import line10 from '../../ressources/Appicon/line10.png';
 import Line10grey from '../../ressources/Appicon/Line10grey.png';
 import statuschecked from '../../ressources/Appicon/statuschecked.png';
 
+import ThingsContext from '../../../thingsContext';
+
+
 import MapView, { PROVIDER_GOOGLE,Marker, Polyline,Polygon } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -32,7 +35,8 @@ import * as Location from 'expo-location';
 
 import { WebView } from 'react-native-webview';
 
-import donnee from '../../ressources/database/Keys.js'
+import donnee,{pdjeuner} from '../../ressources/database/Keys.js'
+
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
 
 //webview => 
@@ -160,14 +164,6 @@ const styles = StyleSheet.create({
 
 const Tab = createBottomTabNavigator();
 
-
-const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-
-
 // picked doit etre  active seulemet quand on cliques le grand bouton et rien dautres.... et puis desactive quand cest le cas.. pour ce qui est de la quantite je crois que ca va
 // deja .... il faut juste ajuster le text qui va avec ...
 // plus ouvre un autre article....
@@ -180,6 +176,9 @@ class Post extends PureComponent {
 }
 */
 function PdjScreen (props){
+  const {order} = useContext(ThingsContext);
+  const {toggleTheme} = useContext(ThingsContext);
+
 
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -203,8 +202,8 @@ function PdjScreen (props){
     return filtered;
   }
 
-  const  CustomModal = ({item,props}) => (
-
+  const  CustomModal = ({item}) => (
+  
  <View style={styles.centeredView}>
  <Modal
       animationType="slide"
@@ -230,7 +229,8 @@ function PdjScreen (props){
                if (NOUVELLEValue.quantite <1)  setModalVisible(false);
                 commandTemp[item.code] = NOUVELLEValue;
                 setCommand(filterObjects(commandTemp));
-                console.log(item.code);
+                toggleTheme(filterObjects(commandTemp));
+               // console.log(item.code);
             }}>
               <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
                 <Image source={moins}/>
@@ -256,7 +256,7 @@ function PdjScreen (props){
               console.log('nouvelle command value...', command);
               let result = filterObjects(commandTemp);
               setCommand(result);
-
+              toggleTheme(result);
               setTimeout(function(){  setModalVisible(true);}, 0);
             }}>
               <View style={{alignItems:'center',justifyContent:'center',borderTopRightRadius:1,borderBottomRightRadius:5,paddingLeft:17,paddingRight:17,paddingTop:15, paddingBottom:15,borderStyle:'solid',borderColor:'#EAEAEA',borderWidth:1.5,borderTopStartRadius:3,borderBottomStartRadius:3}}>
@@ -267,8 +267,6 @@ function PdjScreen (props){
           <Pressable
             onPress={() => {
               setModalVisible(!modalVisible);
-              //console.log("Set the value ....")
-              console.log('command',command);
             }}
           >
             <View style={{backgroundColor:'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row',paddingLeft:112,paddingRight:124}}>
@@ -280,7 +278,7 @@ function PdjScreen (props){
       </View>
     </Modal> 
     </View>
-  ); // Render things inside the data
+  );
 
 
 const renderItem = ({ item }) => (
@@ -319,12 +317,13 @@ const renderItem = ({ item }) => (
           <Pressable onPress={ () => {
             let commandTemp = command ? command : {};
             let elmt = commandTemp[item.code] || {quantite:  0 , picked: false,  supplement:"",creation:Date.now(),client:'CLIENT'}; //??????????????? METTRE LE UID DE CELUI QUI A ETE RETENU DANS LA LISTE DE RECHERCHE
-            let NOUVELLEValue =  {quantite:  elmt.quantite ? 0: 1 , picked: command[item.code]? !command[item.code].picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo"}; 
+            //"item": {"category": "pdj", "code": "bhb", "description": "Beignets + Haricot + Bouilie", "name": "Beignets-Haricots-Bouillie", "prix": 500, "souscategory": "local", "stock": 7}
+            let NOUVELLEValue =  {quantite:  elmt.quantite ? 0: 1 , picked: command[item.code]? !command[item.code].picked: true,  supplement:"",creation: elmt.creation? elmt.creation: Date.now(),client: elmt.client? elmt.client: "Chapallo",category: item.category, code:  item.code, description:item.description, name: item.name, prix: item.prix, souscategory:item.souscategory,}; 
             commandTemp[item.code] = NOUVELLEValue;
             setItemSelected(item);
              setCommand(filterObjects(commandTemp));
             NOUVELLEValue.picked   && NOUVELLEValue.quantite? setModalVisible(true): setModalVisible(false);
-
+            toggleTheme(filterObjects(commandTemp));
             }}>
             <View style={{backgroundColor: command[item.code] ?'#D5D952':'#F2AE30',borderBottomEndRadius:8,borderBottomStartRadius:8,alignItems:'center',justifyContent:'center',flexDirection:'row'}}>
               <Image source={command[item.code]?addedgreen:  Shape} style={{marginRight:6}}/>
@@ -339,7 +338,8 @@ const renderItem = ({ item }) => (
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
       <FlatList
-        data={donnee.pdj.local}
+        
+        data={props.data? props.data: pdjeuner}
         renderItem={renderItem}
         keyExtractor={item => item.code}
       />
@@ -366,6 +366,26 @@ const renderItem = ({ item }) => (
   </View>
   );
 }
+
+export function CartScreen (){
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{typeof(title) ==='string'? title:title.name + " here is the name"}</Text>
+    </View>
+  );
+  const {groupList} = useContext(ThingsContext);
+  
+  return (
+    <SectionList
+    sections={groupList}
+    keyExtractor={(item, index) => item + index}
+    renderItem={({ item }) => <Item title={item} />}
+     renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+      backgroundColor: "#fff"}}>{section.title}</Text>}
+  />
+  );
+}
+
 function OrderDelivery (){
   return (
     <View style={styles.container}>
@@ -382,17 +402,19 @@ function OrderDelivery (){
     </MapView>
   </View>
   );
-
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
-function EntreeScreen (){
+
+function EntreeScreen (props){
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
       <Image source={confirmationGreen} style={{marginBottom:29,marginTop:'auto'}}/>
       <Text style={{color:'#3F4D5F',fontSize:20, textAlign:'center',paddingBottom:10}} >Merci Pour votre Commande! </Text>
       <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center',paddingLeft:62,paddingRight:61,marginBottom:'auto'}}> Votre repas est en cours de preparation. Vous pouvez controller l'Etat de votre commande dans la rubique historique des commandes </Text>
       <View style={{alignItems:'flex-end'}}>
-        <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+        <Pressable onPress={()=>props.navigation.navigate('Vienoiserie')}>
+          <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+        </Pressable>
       </View>
       
     </View>
@@ -400,7 +422,8 @@ function EntreeScreen (){
   );
 
 }
-function VienoiserieScreen (){
+////   Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
+function VienoiserieScreen (props){
   return (
     <View style={{flex:1}}>
         <View style={{flex:1.20,backgroundColor:'#FAFAFA',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',justifyContent:'center',}}>
@@ -454,12 +477,15 @@ function VienoiserieScreen (){
                </View>
             </ScrollView>
             <View style={{borderTopWidth:2,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <View style={{borderRightWidth:1,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,backgroundColor:'#FFF'}}>
+             
+              <View style={{borderRightWidth:1,borderStyle:'solid', borderColor:'#F2F2F2',flex:1,backgroundColor:'#FFF'}}>
+                <Pressable onPress={()=> props.navigation.navigate('Plat Chauds')}>
                   <Text style={{color:'#F23445',fontSize:12,textAlign:'center'}}>
                       Map View
                   </Text>
-                </View>
-
+                  </Pressable>
+              </View>
+                
                 <View style={{backgroundColor:'#FFF',flex:1}}>
                   <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center'}}>
                         Live Video
@@ -485,11 +511,10 @@ function VienoiserieScreen (){
                   </View>
                  
               </View>
-              <View style={{marginTop:'auto',marginBottom:19,marginLeft:24,flexDirection:'row',alignItems:'center'}}>
+              <View style={{marginTop:'auto',marginBottom:19,marginLeft:'auto',marginRight:'auto',flexDirection:'row',alignItems:'center'}}>
                 <Image source={checkgreen} style={{marginRight:2}}/>
                 <Text style={{fontSize:12,color:'#A4A726'}}> Livré !</Text>
               </View>
-              
         </View>
 
     </View>
@@ -644,8 +669,7 @@ function RaffraichissementScreen (){
 /> 
 }
 
-function CocktailScreen (){
-
+function CocktailScreen (props){
   const [quantite,setQuantite]= useState(0);
   const [date, setDate] = useState(new Date(Date.now()));
   const [mode, setMode] = useState('date');
@@ -885,10 +909,9 @@ function CocktailScreen (){
         <TextInput multiline={true} placeholder="Entrez les instrutions ici" onChangeText={(val)=>console.log(val)} style={{opacity:0.6,borderRadius:3,backgroundColor:'#FFF', borderStyle:'solid',borderColor:'#DBDBDB',borderWidth:1.5,alignSelf:'stretch',marginLeft:45,marginRight:45,marginBottom:20,padding:10}}/>
     </View>
 
-
     <Pressable
         onPress={() => {
-          console.log("pressed");
+          props.navigation.navigate('Entrees');
         }}
         style={[
           {
@@ -1007,6 +1030,20 @@ function MyTabs() {
         component={CocktailScreen}
         options={{
           tabBarLabel: 'Cocktail',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Cart"
+        component={CartScreen}
+        options={{
+          tabBarLabel: 'Cart',
           tabBarIcon: () => (
             <Image
               fadeDuration={0}

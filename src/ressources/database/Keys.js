@@ -91,34 +91,34 @@ const Keys= {
     },
     pdj:{
         vienoiserie:[
-            {name:'Pain Choco',code: 'pn-chko',stock: 7, prix:1000,description:'Croissant au Chocolat'},
-            {name:'palmier',code: 'palmier',stock: 7, prix:1000,description:'pate feuillete saupoudree de sucre'},
-            {name:'croissant',code: 'crssant',stock: 7, prix:1000,description:'pate feuilletee beurree '},
-            {name:'feuilletes ',code: 'feuilletes',stock: 7, prix:1000,description:'pates feuillete ...'},
+            {name:'Pain Choco',code: 'pn-chko',stock: 7, prix:1000,description:'Croissant au Chocolat',category:'pdj',souscategory:'vienoiserie'},
+            {name:'palmier',code: 'palmier',stock: 7, prix:1000,description:'pate feuillete saupoudree de sucre',category:'pdj',souscategory:'vienoiserie'},
+            {name:'croissant',code: 'crssant',stock: 7, prix:1000,description:'pate feuilletee beurree ',category:'pdj',souscategory:'vienoiserie'},
+            {name:'feuilletes ',code: 'feuilletes',stock: 7, prix:1000,description:'pates feuillete ...',category:'pdj',souscategory:'vienoiserie'},
         ],
         etranger:[
-            {name:'Classique',code: 'clsq',stock: 7, prix:1000,description:'Brioche + Tartine + Boisson chaude'},
-            {name:'Continental',code: 'cntl',stock: 7, prix:1500,description:'classique + Omelette '},
-            {name:'Chapallo',code: 'chaplo',stock: 7, prix:2000,description:'continental + Boissoon. froide ou fruits'},
-            {name:'5etoiles',code: 'star',stock: 7, prix:3000,description:'Chapallo + Crudites '},
+            {name:'Classique',code: 'clsq',stock: 7, prix:1000,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'etranger'},
+            {name:'Continental',code: 'cntl',stock: 7, prix:1500,description:'classique + Omelette ',category:'pdj',souscategory:'etranger'},
+            {name:'Chapallo',code: 'chaplo',stock: 7, prix:2000,description:'continental + Boissoon. froide ou fruits',category:'pdj',souscategory:'etranger'},
+            {name:'5etoiles',code: 'star',stock: 7, prix:3000,description:'Chapallo + Crudites ',category:'pdj',souscategory:'etranger'},
         ],
         local:[
-            {name:'Beignets-Haricots-Bouillie',code: 'bhb',stock: 7, prix:500,description:'Beignets + Haricot + Bouilie'},
-            {name:'Sapghetti Saute',code: 'spgt-ste',stock: 7, prix:600,description:'Spaghetti saute + pain'},
-            {name:'Puree d"Avocat',code: 'pree-avcat',stock: 7, prix:600,description:'Puree d"avocat + pain'},
-            {name:'Omelette Spaghetti garnie',code: 'omelette',stock: 7, prix:600,description:'Omelette + Spaghetti/haricot'},
-            {name:'Bouillon',code: 'bllon',stock: 7, prix:1000,description:'Bouillon de Pattes de Boeuf ou Poisson'},
+            {name:'Beignets-Haricots-Bouillie',code: 'bhb',stock: 7, prix:500,description:'Beignets + Haricot + Bouilie',category:'pdj',souscategory:'local'},
+            {name:'Sapghetti Saute',code: 'spgt-ste',stock: 7, prix:600,description:'Spaghetti saute + pain',category:'pdj',souscategory:'local'},
+            {name:'Puree d"Avocat',code: 'pree-avcat',stock: 7, prix:600,description:'Puree d"avocat + pain',category:'pdj',souscategory:'local'},
+            {name:'Omelette Spaghetti garnie',code: 'omelette',stock: 7, prix:600,description:'Omelette + Spaghetti/haricot',category:'pdj',souscategory:'local'},
+            {name:'Bouillon',code: 'bllon',stock: 7, prix:1000,description:'Bouillon de Pattes de Boeuf ou Poisson',category:'pdj',souscategory:'local'},
         ],
         boissonsChaude: [
-            {name:'Café',code: 'kfe',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude'},
-            {name:'Nescafe',code: 'nskf',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude'},
-            {name:'Lait',code: 'lait',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude'},
-            {name:'Chocolat',code: 'chlt',stock: 7, prix:500,description:'Ovaltine /Matinal'},
+            {name:'Café',code: 'kfe',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+            {name:'Nescafe',code: 'nskf',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+            {name:'Lait',code: 'lait',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+            {name:'Chocolat',code: 'chlt',stock: 7, prix:500,description:'Ovaltine /Matinal',category:'pdj',souscategory:'boissonsChaude'},
         ],
         infusion:[
-            {name:'The',code: 'T',stock: 7, prix:500,description:'The menthe ou autres....'},
-            {name:'Tisane',code: 'Tsane',stock: 7, prix:500,description:'Tisane'},
-            {name:'Bantou',code: 'btu',stock: 7, prix:500,description:'Bantou'},
+            {name:'The',code: 'T',stock: 7, prix:500,description:'The menthe ou autres....',category:'pdj',souscategory:'infusion'},
+            {name:'Tisane',code: 'Tsane',stock: 7, prix:500,description:'Tisane',category:'pdj',souscategory:'infusion'},
+            {name:'Bantou',code: 'btu',stock: 7, prix:500,description:'Bantou',category:'pdj',souscategory:'infusion'},
         ],
     },
     plats:{
@@ -240,5 +240,33 @@ const Keys= {
     },
     'fast food':[],
 }
+
+export const  pdjeuner=[
+        {name:'Beignets-Haricots-Bouillie',code: 'bhb',stock: 7, prix:500,description:'Beignets + Haricot + Bouilie',category:'pdj',souscategory:'local'},
+        {name:'Sapghetti Saute',code: 'spgt-ste',stock: 7, prix:600,description:'Spaghetti saute + pain',category:'pdj',souscategory:'local'},
+        {name:'Puree d"Avocat',code: 'pree-avcat',stock: 7, prix:600,description:'Puree d"avocat + pain',category:'pdj',souscategory:'local'},
+        {name:'Omelette Spaghetti garnie',code: 'omelette',stock: 7, prix:600,description:'Omelette + Spaghetti/haricot',category:'pdj',souscategory:'local'},
+        {name:'Bouillon',code: 'bllon',stock: 7, prix:1000,description:'Bouillon de Pattes de Boeuf ou Poisson',category:'pdj',souscategory:'local'},
+
+        {name:'Café',code: 'kfe',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+        {name:'Nescafe',code: 'nskf',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+        {name:'Lait',code: 'lait',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
+        {name:'Chocolat',code: 'chlt',stock: 7, prix:500,description:'Ovaltine /Matinal',category:'pdj',souscategory:'boissonsChaude'},
+        
+        {name:'The',code: 'T',stock: 7, prix:500,description:'The menthe ou autres....',category:'pdj',souscategory:'infusion'},
+        {name:'Tisane',code: 'Tsane',stock: 7, prix:500,description:'Tisane',category:'pdj',souscategory:'infusion'},
+        {name:'Bantou',code: 'btu',stock: 7, prix:500,description:'Bantou',category:'pdj',souscategory:'infusion'},
+
+        {name:'Pain Choco',code: 'pn-chko',stock: 7, prix:1000,description:'Croissant au Chocolat',category:'pdj',souscategory:'vienoiserie'},
+        {name:'palmier',code: 'palmier',stock: 7, prix:1000,description:'pate feuillete saupoudree de sucre',category:'pdj',souscategory:'vienoiserie'},
+        {name:'croissant',code: 'crssant',stock: 7, prix:1000,description:'pate feuilletee beurree ',category:'pdj',souscategory:'vienoiserie'},
+        {name:'feuilletes ',code: 'feuilletes',stock: 7, prix:1000,description:'pates feuillete ...',category:'pdj',souscategory:'vienoiserie'},
+    
+        {name:'Classique',code: 'clsq',stock: 7, prix:1000,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'etranger'},
+        {name:'Continental',code: 'cntl',stock: 7, prix:1500,description:'classique + Omelette ',category:'pdj',souscategory:'etranger'},
+        {name:'Chapallo',code: 'chaplo',stock: 7, prix:2000,description:'continental + Boissoon. froide ou fruits',category:'pdj',souscategory:'etranger'},
+        {name:'5etoiles',code: 'star',stock: 7, prix:3000,description:'Chapallo + Crudites ',category:'pdj',souscategory:'etranger'}
+    
+];
 //ORDRE PDJ, ENTREES, PLATS CHAUDS , DESSERTS , RAFFRAICHISSEMENT ...  FAST FOOD...
 export default Keys;
