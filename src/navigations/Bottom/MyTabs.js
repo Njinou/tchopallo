@@ -5,6 +5,9 @@ import {View} from 'react-native';
 import React,{useState,useEffect,useContext} from 'react';
 import pdj from '../../ressources/images/pdj.png';
 import entree from '../../ressources/images/entree.jpeg';
+import guiness from '../../ressources/images/menu/guiness.jpeg';
+import cocaglass from '../../ressources/images/menu/cocaglass.jpeg';
+
 import raffraichissement from  '../../ressources/images/raffraichissement.jpeg';
 import cocktail from  '../../ressources/images/cocktail.jpeg';
 import desserts from  '../../ressources/images/desserts.jpeg';
@@ -35,7 +38,7 @@ import * as Location from 'expo-location';
 
 import { WebView } from 'react-native-webview';
 
-import donnee,{pdjeuner} from '../../ressources/database/Keys.js'
+import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../ressources/database/Keys.js'
 
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
 //  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
@@ -251,18 +254,14 @@ function HomeScreen (props){
   );
 
 
+
 const renderItem = ({ item }) => (
   <>
   <ScrollView>
   <View style={{flex:0.80,marginTop:5}}>
       <View style={{backgroundColor:'transparent',flex:1,paddingLeft:22, paddingRight:22
       }}>
-        <Image style={{width: undefined, height: 50, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,
-        
-        }} resizeMode="cover" source={{
-            uri: 'https://reactnative.dev/img/tiny_logo.png',
-          }} 
-        />
+        <Image source={cocaglass} style={{width: undefined, height:170, flex:1,marginTop:20,borderTopLeftRadius:8,borderTopRightRadius:8,}}/>
       </View>
       <View style={{flex:1,paddingLeft:22, paddingRight:22,
       // shadowOffset: {width:0, height: '2px'}, shadowRadius:'10px', shadowOpacity:10 , shadowColor: 'rgba(170,170,170,0.5)',elevation:5
@@ -276,10 +275,10 @@ const renderItem = ({ item }) => (
       borderBottomEndRadius:8,borderBottomStartRadius:8
       }}>
         <Text style={{fontSize:16, color:'#3F4D5F',marginBottom:10,marginTop:20,paddingLeft:17,paddingRight:15}}>
-            {item.name}
+            {item.name} 
           </Text>
           <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
-              $10.00
+              1000 Franc CFA
           </Text>
           <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
           Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
@@ -305,16 +304,72 @@ const renderItem = ({ item }) => (
 </ScrollView> 
  </>
 );
-  return  (
-    <View style={{justifyContent: 'space-between',flex:1}}>
-      
-      <SectionList
-    sections={pdjeuner}
+
+const renderItemSectionList = ({data}) => (
+  <>
+  <Text>{JSON.stringify(data)}</Text>
+  <SectionList
+  sections={data}
+  keyExtractor={(item, index) => item + index}
+  renderItem={renderItem}
+   renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+    backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
+/>
+</>
+);
+
+
+/*
+this.arrayholder.filter(item => {
+  const itemData = item.email.toLowerCase();
+
+  const textData = text.toLowerCase();
+
+  return itemData.indexOf(textData) > -1;
+});
+
+
+*/
+/*
+<SectionList
+    sections={platsKeys}
     keyExtractor={(item, index) => item + index}
     renderItem={renderItem}
      renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
-      backgroundColor: "#fff",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
+      backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
   />
+
+*/
+//BARRE DE RECHERCHE A AVOIR... AUTOMATIQUEMENT........
+const donneFiltrer = (donnee) =>{
+  let filtrer = donnee.filter( item => {
+   return  item.data.filter(itema =>  { 
+    return  itema.name.includes('Guiness');})
+})
+return filtrer;
+}
+  return  (
+    <View style={{justifyContent: 'space-between',flex:1}}>
+      <FlatList
+        data={drinkKeys}
+        renderItem= {({ item }) => (
+          <View style={{marginBottom:10}}>
+            <Text style={{color:'white',fontSize: 32,
+              backgroundColor: "red",textAlign:'center',fontWeight:'bold',marginBottom:3}}>{item.id}</Text>
+              
+          <SectionList
+            sections={donneFiltrer(item.data)}
+            keyExtractor={(items, index) => items + index}
+            renderItem={renderItem}
+            renderSectionHeader={({section}) => <Text  style={{fontSize: 22,
+              backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00',marginTop:15,paddingTop:5,paddingBottom:5}}>{section.title}</Text>}
+          />
+          </View>
+
+        )}
+        keyExtractor={(item)=> item.id}
+      />
+
 
       <CustomModal item={itemSelected} />
     <View style={{marginTop:'auto'}}>
