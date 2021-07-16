@@ -1,4 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
 import {View} from 'react-native';
 
@@ -46,6 +48,8 @@ import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
 import { CommonActions } from '@react-navigation/routers';
+
+const TopNavigator = createMaterialTopTabNavigator();
 
 const styles = StyleSheet.create({
   container: {
@@ -375,7 +379,8 @@ return filtrer;
     <View style={{marginTop:'auto'}}>
  <Pressable
       onPress={() => {
-        props.navigation.navigate('Detail de la Commande')
+       // props.navigation.navigate('Detail de la Commande');
+       props.navigation.navigate('Drinks');
         console.log("pressed");
       }}
       style={[
@@ -394,6 +399,8 @@ return filtrer;
   </View>
   );
 }
+
+
 
 export function CartScreen (){
   const Item = ({ title }) => (
@@ -432,6 +439,17 @@ function OrderDelivery (){
   );
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
+
+function Drinks() {
+  return (
+    <TopNavigator.Navigator>
+      <TopNavigator.Screen name="OrderDelivery" component={OrderDelivery} />
+      <TopNavigator.Screen name="CartScreen" component={CartScreen} />
+      <TopNavigator.Screen name="HomeScreen" component={HomeScreen} />
+    </TopNavigator.Navigator>
+  );
+}
+
 
 function OrderConfirmationScreen (props){
   return (
@@ -1068,6 +1086,21 @@ function MyTabs() {
           ),
         }}
       />
+      <Stack.Screen
+        name="Drinks"
+        component={Drinks}
+        options={{
+          tabBarLabel: 'Drinks',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+
     </Stack.Navigator>
   );
 }
