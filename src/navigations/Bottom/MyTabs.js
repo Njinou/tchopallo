@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import {EntrtyPoint} from '../../../index';
 import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
 import {View} from 'react-native';
 
@@ -152,6 +152,8 @@ const styles = StyleSheet.create({
   
 });
 
+//reset context at any component instead of continuing.... 
+//
 function HomeScreen (props){
   const {order} = useContext(ThingsContext);
   const {toggleTheme} = useContext(ThingsContext);
@@ -159,7 +161,7 @@ function HomeScreen (props){
 
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [command,setCommand] = useState({});
+  const [command,setCommand] = useState(order);
   const [quantite,setQuantite]= useState(0);
   const [itemSelected,setItemSelected] = useState({});
   const [tester,setTester] = useState('JE ne crois pas ');
@@ -282,10 +284,10 @@ const renderItem = ({ item }) => (
             {item.name} 
           </Text>
           <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
-              1000 Franc CFA
+              {item.prix} Franc CFA
           </Text>
           <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
-          Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
+            {item.description}
           </Text>
           <Pressable onPress={ () => {
             let commandTemp = command ? command : {};
@@ -308,7 +310,10 @@ const renderItem = ({ item }) => (
 </ScrollView> 
  </>
 );
+/*
+your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 8218.6669921875, "dt": 41488, "prevDt": 54931}
 
+*/
 const renderItemSectionList = ({data}) => (
   <>
   <Text>{JSON.stringify(data)}</Text>
@@ -322,65 +327,22 @@ const renderItemSectionList = ({data}) => (
 </>
 );
 
-
-/*
-this.arrayholder.filter(item => {
-  const itemData = item.email.toLowerCase();
-
-  const textData = text.toLowerCase();
-
-  return itemData.indexOf(textData) > -1;
-});
-
-
-*/
-/*
-<SectionList
-    sections={platsKeys}
-    keyExtractor={(item, index) => item + index}
-    renderItem={renderItem}
-     renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
-      backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
-  />
-
-*/
-//BARRE DE RECHERCHE A AVOIR... AUTOMATIQUEMENT........
-const donneFiltrer = (donnee) =>{
-  let filtrer = donnee.filter( item => {
-   return  item.data.filter(itema =>  { 
-    return  itema.name.includes('Guiness');})
-})
-return filtrer;
-}
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
-      <FlatList
-        data={drinkKeys}
-        renderItem= {({ item }) => (
-          <View style={{marginBottom:10}}>
-            <Text style={{color:'white',fontSize: 32,
-              backgroundColor: "red",textAlign:'center',fontWeight:'bold',marginBottom:3}}>{item.id}</Text>
-              
-          <SectionList
-            sections={donneFiltrer(item.data)}
-            keyExtractor={(items, index) => items + index}
-            renderItem={renderItem}
-            renderSectionHeader={({section}) => <Text  style={{fontSize: 22,
-              backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00',marginTop:15,paddingTop:5,paddingBottom:5}}>{section.title}</Text>}
-          />
-          </View>
-
-        )}
-        keyExtractor={(item)=> item.id}
-      />
-
-
+     <SectionList
+      sections={props.data?props.data :platsKeys}
+      keyExtractor={(item, index) => item + index}
+      renderItem={renderItem}
+      renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+        backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
+    />
+    
       <CustomModal item={itemSelected} />
     <View style={{marginTop:'auto'}}>
  <Pressable
       onPress={() => {
-       // props.navigation.navigate('Detail de la Commande');
-       props.navigation.navigate('Drinks');
+        props.navigation.navigate('Detail de la Commande');
+      // props.navigation.navigate('Drinks');
         console.log("pressed");
       }}
       style={[
@@ -440,12 +402,46 @@ function OrderDelivery (){
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
 
+function BiereScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Biere} />
+  );
+  
+}
+function VinScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Vin} />
+  );
+  
+}
+function EauScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Eau} />
+  );
+  
+}
+function JusScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Jus} />
+  );
+  
+}
+
+function LiqueurScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Liqueur} />
+  );
+  
+}
+
 function Drinks() {
   return (
     <TopNavigator.Navigator>
-      <TopNavigator.Screen name="OrderDelivery" component={OrderDelivery} />
-      <TopNavigator.Screen name="CartScreen" component={CartScreen} />
-      <TopNavigator.Screen name="HomeScreen" component={HomeScreen} />
+      <TopNavigator.Screen name="Eau" component={EauScreen} />
+      <TopNavigator.Screen name="Jus" component={JusScreen} />
+      <TopNavigator.Screen name="Biere" component={BiereScreen} />
+      <TopNavigator.Screen name="Vin" component={VinScreen} />
+      <TopNavigator.Screen name="Liqueur" component={LiqueurScreen} />
     </TopNavigator.Navigator>
   );
 }
@@ -459,7 +455,7 @@ function OrderConfirmationScreen (props){
       <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center',paddingLeft:62,paddingRight:61,marginBottom:'auto'}}> Votre repas est en cours de preparation. Vous pouvez controller l'Etat de votre commande dans la rubique historique des commandes </Text>
       <View style={{alignItems:'flex-end'}}>
         <Pressable onPress={()=>props.navigation.navigate('Order Status')}>
-          <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+          <Text style={{paddingBottom:25,fontSize:18,color:'#C3C1C1',paddingTop:10}}> Done</Text>
         </Pressable>
       </View>
       
@@ -1100,7 +1096,35 @@ function MyTabs() {
           ),
         }}
       />
-
+      <Stack.Screen
+        name="Commande"
+        component={CartScreen}
+        options={{
+          tabBarLabel: 'Commande',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="EntrtyPoint"
+        component={EntrtyPoint}
+        options={{
+          tabBarLabel: 'EntrtyPoint',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      
     </Stack.Navigator>
   );
 }
