@@ -45,9 +45,12 @@ import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
 //  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
 
+//upload picture of payment... 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
 import { CommonActions } from '@react-navigation/routers';
+
+import { useNavigation } from '@react-navigation/native';
 
 const TopNavigator = createMaterialTopTabNavigator();
 
@@ -154,10 +157,10 @@ const styles = StyleSheet.create({
 
 //reset context at any component instead of continuing.... 
 //
-function HomeScreen (props){
+export function HomeScreen (props){
   const {order} = useContext(ThingsContext);
   const {toggleTheme} = useContext(ThingsContext);
-
+  const navigation = useNavigation();
 
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -232,7 +235,7 @@ function HomeScreen (props){
 
               // NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
               commandTemp[item.code] = NOUVELLEValue;
-              console.log('nouvelle command value...', command);
+             // console.log('nouvelle command value...', command);
               let result = filterObjects(commandTemp);
               setCommand(result);
               toggleTheme(result);
@@ -258,8 +261,6 @@ function HomeScreen (props){
     </Modal> 
     </View>
   );
-
-
 
 const renderItem = ({ item }) => (
   <>
@@ -341,7 +342,8 @@ const renderItemSectionList = ({data}) => (
     <View style={{marginTop:'auto'}}>
  <Pressable
       onPress={() => {
-        props.navigation.navigate('Detail de la Commande');
+        console.log('Les elements props... ',props);
+        navigation.navigate('Detail de la Commande');
       // props.navigation.navigate('Drinks');
         console.log("pressed");
       }}
@@ -469,7 +471,7 @@ function OrderStatuScreen (props){
   return (
     <View style={{flex:1}}>
         <View style={{flex:1.20,backgroundColor:'#FAFAFA',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',justifyContent:'center',}}>
-            <View style={{marginLeft:24,marginRight:22,flexDirection:'row',marginTop:20}}>
+            <View style={{marginLeft:24,marginRight:22,flexDirection:'row'}}>
                 <View>
                     <Text style={{fontSize:16,color:'#3F4D5F',marginBottom:6}}>
                         Aujourd'hui
@@ -487,7 +489,7 @@ function OrderStatuScreen (props){
             </View>
         </View>
 
-        <View style={{flex:1,backgroundColor:'#FFF',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',}}>
+        <View style={{flex:1.5,backgroundColor:'#FFF',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',}}>
             <Text style={{marginLeft:24,marginRight:51,marginBottom:5,fontSize:16,color:'#3F4D5F'}}>
               Etat de la Commande
             </Text>
@@ -544,7 +546,7 @@ function OrderStatuScreen (props){
                       <Text style={{fontSize:12,color:'#3F4D5F',marginBottom:3}}>
                           Banane Malaxee
                       </Text>
-                      <Text style={{fontSize:12,color:'#3F4D5F',paddingBottom:12}}>
+                      <Text style={{fontSize:12,color:'#3F4D5F'}}>
                           Cout Total: 2.500 Francs CFA
                       </Text>
                   </View>
@@ -704,9 +706,10 @@ Linking.openURL(url);
   return <Text> dessert is good for digestion... deal with it .........</Text>
 }
 
-function RaffraichissementScreen (){
+export function WebViewScreen (){
   return <WebView
-  source={{ uri: 'https://infinite.red' }}
+  source={{ uri: 'https://infinite.red' 
+}}
   style={{ marginTop: 20 }}
 /> 
 }
@@ -804,12 +807,29 @@ function OrderDetailScreen (props){
             </View>
             <View style={{flex:1,borderColor:'#F2F2F2',borderTopWidth:2,borderStyle:'solid',paddingBottom:35,paddingLeft:24,paddingTop:29, paddingRight:19,backgroundColor:'#FAFAFA',borderBottomLeftRadius:8,borderBottomRightRadius:8}}>
                 <Text style={{fontSize:16,color:'#3F4D5F',paddingBottom:5,textAlign:'center',fontWeight:'500'}}> Choisissez l'addresse à laquelle vous: {textCommand} </Text>
-                <Text style={{fontSize:12,color:'#3F4D5F',paddingBottom:17}}> Chapallo de Deido 416 Rue Essaka ...</Text>
+
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25,marginTop:15}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}> Chapallo de Deido 416 Rue Essaka ...</Text>
+              </View>
+              
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}>TchopAllo Tradex Rhones Poulenc...</Text>
+              </View>
+              
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}>A votre Position</Text>
+              </View>
+
                
-               <View style={{flexDirection:'row',paddingBottom:29}}>
+               <Pressable onPress={()=>alert('Je ne sais pas...')}>
+               <View style={{flexDirection:'row',paddingBottom:29,paddingLeft:46,alignItems:'center'}}>
                   <Image source={addRed} style={{marginRight:6}}/> 
                   <Text style={{color:'#F23445',fontSize:12,flex:1}}>Add New Address</Text>
                 </View>
+                </Pressable>
             </View>
       </View>
 
@@ -884,14 +904,14 @@ function OrderDetailScreen (props){
           <Text style={{color:'#3F4D5F',paddingBottom:21,fontWeight:'bold',textAlign:'center'}}>Quand et A Quelle Heure souhaiteriez vous : {textCommand}</Text>
               <View style={{marginLeft:45}}>
                     <Pressable onPress= {()=> setTempsLivraison('AussiTot')} >
-                      <View style={{flexDirection:'row',marginBottom:31}}>
+                      <View style={{flexDirection:'row',marginBottom:31,alignItems:'center'}}>
                           <Image source={tempsLivraison === 'AussiTot'? radioSelected: radio} />
                           <Text style={{textAlign:'center',fontSize:14,color:tempsLivraison === 'AussiTot'? '#F23445': '#3F4D5F'}}> AussiTot Que Possible (estimee A 1 (Une) Heure de Temps </Text>
                       </View>
                     </Pressable>
 
                     <Pressable onPress={() => setTempsLivraison('Plus Tard')}>
-                      <View style={{flexDirection:'row'}}>
+                      <View style={{flexDirection:'row',alignItems:'center'}}>
                           <Image source={tempsLivraison === 'AussiTot'?  radio: radioSelected} />
                           <Text style={{textAlign:'center',fontSize:14,color:tempsLivraison === 'AussiTot'? '#3F4D5F' : '#F23445' }}> Choisir un jour et une heure de Livraison</Text>
                       </View>
@@ -977,7 +997,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 //Tab.Navigator
 //Tab.Screen
-function MyTabs() {
+function MyTabs(props) {
   return (
     <Stack.Navigator 
       screenOptions ={{
@@ -994,9 +1014,8 @@ function MyTabs() {
         labelStyle: {color:'white'},
       }}
     > 
-    
       <Stack.Screen 
-      name="Home" component={HomeScreen}  
+      name="Home" 
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: () => (
@@ -1007,7 +1026,10 @@ function MyTabs() {
             />
           ),
         }}
-      />
+      >
+        {() => <HomeScreen data={props.data? props.data:grillKeys} />}
+      </Stack.Screen>
+
       <Stack.Screen name="Order Confirmation" component={OrderConfirmationScreen}  
         options={{
           tabBarLabel: 'Confirmation de la Commande ',
@@ -1056,7 +1078,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Stack.Screen name="Raffraichissement" component={RaffraichissementScreen}  
+      <Stack.Screen name="WebViewScreen" component={WebViewScreen}  
         options={{
           tabBarLabel: 'Raffraichissements',
           tabBarIcon: () => (

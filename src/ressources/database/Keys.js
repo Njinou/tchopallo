@@ -145,7 +145,7 @@ export const  drinkKeys = {
         }
       ]
 };
-export const  platsKeys=[
+export const  platsKeys=[ 
     {
         title:'accompagnement',
         data : [
@@ -348,4 +348,6 @@ export const  pdjeuner=[
     
 ];
 //ORDRE PDJ, ENTREES, PLATS CHAUDS , DESSERTS , RAFFRAICHISSEMENT ...  FAST FOOD...
+const Keys = {pdjeuner,dessertsKeys,entreesKeys,grillKeys,platsKeys,drinkKeys};
+export default Keys;
 //export default Keys;

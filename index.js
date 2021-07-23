@@ -10,7 +10,10 @@ import {Text,Image,View} from 'react-native';
 import cart from './src/ressources/images/cart.png';
 
 import 'react-native-gesture-handler';
-import MyTabs from './src/navigations/Bottom/MyTabs';
+import Keys from './src/ressources/database/Keys';
+
+import BottomNavigation from './src/navigations/Bottom/BottomNavigation';
+
 import { NavigationContainer } from '@react-navigation/native'; 
 import ThingsContext, { ThingsProvider } from './thingsContext';
 
@@ -23,7 +26,6 @@ const things = [
 ]
 //toggleTheme: () => {},
 let result =[];
-
 export function EntrtyPoint(props) {
     const [ order, setOrder ] = useState({});
     const [ groupList, setGroupList] = useState([]);
@@ -60,8 +62,8 @@ export function EntrtyPoint(props) {
               <ImageBackground source={cart}  style={{width:20,height:20,alignSelf:'flex-end',marginRight:25,marginBottom:5}}/>
           </View>
         </Pressable>
-        <ThingsProvider value={{order,groupList,toggleTheme}}>
-          <MyTabs />
+        <ThingsProvider value={{order,groupList,toggleTheme,Keys}}>
+          <BottomNavigation />
         </ThingsProvider>
       </NavigationContainer>
     );
