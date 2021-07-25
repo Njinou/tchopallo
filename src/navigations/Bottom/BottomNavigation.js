@@ -3,7 +3,7 @@ import {View,Text,Image} from 'react-native';
 
 import MyTabs from  './MyTabs';
 import  {WebViewScreen} from './MyTabs';
-
+import {OrderStatusScreen} from './MyTabs'
 import cocktail from  '../../ressources/images/cocktail.jpeg';
 import desserts from  '../../ressources/images/desserts.jpeg';
 
@@ -150,10 +150,10 @@ function BottomNavigation() {
         </Tab.Screen>
 
         <Tab.Screen
-          name="WebView "
-          component={WebViewScreen}
+          name="Order Status"
+          component={OrderStatusScreen}
           options={{
-            tabBarLabel: 'WebView',
+            tabBarLabel: 'Statut de la Commande',
             tabBarIcon: () => (
               <Image
                 fadeDuration={0}

@@ -691,9 +691,11 @@ function TrackingMapScreen (){
     </View>
   );
 }
-function DessertScreen (){
+export function OrderStatusScreen (){
 
   //google.navigation:q=latitude,longitude
+  //http://maps.apple.com/?ll=37.484847,-122.148386%22
+  //"geo:37.484847,-122.148386" 
   const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?daddr=' });
 const latLng = `${37.3382082},${-121.8863286}`;
 const label = 'Tchopallo';
@@ -1062,18 +1064,6 @@ function MyTabs(props) {
               fadeDuration={0}
               style={{width: 22, height: 22}}
               source={vienoiserie}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen name="Desserts" component={DessertScreen}  
-        options={{
-          tabBarLabel: 'Desserts',
-          tabBarIcon: () => (
-            <Image
-              fadeDuration={0}
-              style={{width: 22, height: 22}}
-              source={desserts}
             />
           ),
         }}
