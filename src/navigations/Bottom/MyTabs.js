@@ -1,4 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {EntrtyPoint} from '../../../index';
 import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
 import {View} from 'react-native';
 
@@ -43,9 +45,14 @@ import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
 //  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
 
+//upload picture of payment... 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { exp } from 'react-native/Libraries/Animated/Easing';
 import { CommonActions } from '@react-navigation/routers';
+
+import { useNavigation } from '@react-navigation/native';
+
+const TopNavigator = createMaterialTopTabNavigator();
 
 const styles = StyleSheet.create({
   container: {
@@ -148,14 +155,16 @@ const styles = StyleSheet.create({
   
 });
 
-function HomeScreen (props){
+//reset context at any component instead of continuing.... 
+//
+export function HomeScreen (props){
   const {order} = useContext(ThingsContext);
   const {toggleTheme} = useContext(ThingsContext);
-
+  const navigation = useNavigation();
 
   const [itemAdded,addItem] = useState (false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [command,setCommand] = useState({});
+  const [command,setCommand] = useState(order);
   const [quantite,setQuantite]= useState(0);
   const [itemSelected,setItemSelected] = useState({});
   const [tester,setTester] = useState('JE ne crois pas ');
@@ -226,7 +235,7 @@ function HomeScreen (props){
 
               // NOUVELLEValue.picked ? setModalVisible(true): setModalVisible(false);
               commandTemp[item.code] = NOUVELLEValue;
-              console.log('nouvelle command value...', command);
+             // console.log('nouvelle command value...', command);
               let result = filterObjects(commandTemp);
               setCommand(result);
               toggleTheme(result);
@@ -253,8 +262,6 @@ function HomeScreen (props){
     </View>
   );
 
-
-
 const renderItem = ({ item }) => (
   <>
   <ScrollView>
@@ -278,10 +285,10 @@ const renderItem = ({ item }) => (
             {item.name} 
           </Text>
           <Text style={{fontSize:17, color:'#A4A726',marginBottom:10,paddingLeft:17,paddingRight:15}}>
-              1000 Franc CFA
+              {item.prix} Franc CFA
           </Text>
           <Text style={{fontSize:12,color:'#3F4D5F',paddingRight:45,paddingBottom:20,paddingLeft:17,paddingRight:15}}>
-          Organic quinoa and brown rice, lentil blend, tomato sofrito, fresh kale and spinach with a lemon wheel in our umami soy-miso broth.
+            {item.description}
           </Text>
           <Pressable onPress={ () => {
             let commandTemp = command ? command : {};
@@ -304,7 +311,10 @@ const renderItem = ({ item }) => (
 </ScrollView> 
  </>
 );
+/*
+your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 8218.6669921875, "dt": 41488, "prevDt": 54931}
 
+*/
 const renderItemSectionList = ({data}) => (
   <>
   <Text>{JSON.stringify(data)}</Text>
@@ -318,64 +328,23 @@ const renderItemSectionList = ({data}) => (
 </>
 );
 
-
-/*
-this.arrayholder.filter(item => {
-  const itemData = item.email.toLowerCase();
-
-  const textData = text.toLowerCase();
-
-  return itemData.indexOf(textData) > -1;
-});
-
-
-*/
-/*
-<SectionList
-    sections={platsKeys}
-    keyExtractor={(item, index) => item + index}
-    renderItem={renderItem}
-     renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
-      backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
-  />
-
-*/
-//BARRE DE RECHERCHE A AVOIR... AUTOMATIQUEMENT........
-const donneFiltrer = (donnee) =>{
-  let filtrer = donnee.filter( item => {
-   return  item.data.filter(itema =>  { 
-    return  itema.name.includes('Guiness');})
-})
-return filtrer;
-}
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
-      <FlatList
-        data={drinkKeys}
-        renderItem= {({ item }) => (
-          <View style={{marginBottom:10}}>
-            <Text style={{color:'white',fontSize: 32,
-              backgroundColor: "red",textAlign:'center',fontWeight:'bold',marginBottom:3}}>{item.id}</Text>
-              
-          <SectionList
-            sections={donneFiltrer(item.data)}
-            keyExtractor={(items, index) => items + index}
-            renderItem={renderItem}
-            renderSectionHeader={({section}) => <Text  style={{fontSize: 22,
-              backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00',marginTop:15,paddingTop:5,paddingBottom:5}}>{section.title}</Text>}
-          />
-          </View>
-
-        )}
-        keyExtractor={(item)=> item.id}
-      />
-
-
+     <SectionList
+      sections={props.data?props.data :platsKeys}
+      keyExtractor={(item, index) => item + index}
+      renderItem={renderItem}
+      renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
+        backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
+    />
+    
       <CustomModal item={itemSelected} />
     <View style={{marginTop:'auto'}}>
  <Pressable
       onPress={() => {
-        props.navigation.navigate('Detail de la Commande')
+        console.log('Les elements props... ',props);
+        navigation.navigate('Detail de la Commande');
+      // props.navigation.navigate('Drinks');
         console.log("pressed");
       }}
       style={[
@@ -394,6 +363,8 @@ return filtrer;
   </View>
   );
 }
+
+
 
 export function CartScreen (){
   const Item = ({ title }) => (
@@ -433,6 +404,51 @@ function OrderDelivery (){
 }
 //Choisir l'addresse  ou le lieu du restaurant a consommer u bien ou vous souhaitez porter votre met...
 
+function BiereScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Biere} />
+  );
+  
+}
+function VinScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Vin} />
+  );
+  
+}
+function EauScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Eau} />
+  );
+  
+}
+function JusScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Jus} />
+  );
+  
+}
+
+function LiqueurScreen (){
+  return (
+    <HomeScreen data={drinkKeys.Liqueur} />
+  );
+  
+}
+
+function Drinks() {
+  return (
+    <TopNavigator.Navigator>
+      <TopNavigator.Screen name="Eau" component={EauScreen} />
+      <TopNavigator.Screen name="Jus" component={JusScreen} />
+      <TopNavigator.Screen name="Biere" component={BiereScreen} />
+      <TopNavigator.Screen name="Vin" component={VinScreen} />
+      <TopNavigator.Screen name="Liqueur" component={LiqueurScreen} />
+    </TopNavigator.Navigator>
+  );
+}
+
+
 function OrderConfirmationScreen (props){
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
@@ -441,7 +457,7 @@ function OrderConfirmationScreen (props){
       <Text style={{color:'#3F4D5F',fontSize:12,textAlign:'center',paddingLeft:62,paddingRight:61,marginBottom:'auto'}}> Votre repas est en cours de preparation. Vous pouvez controller l'Etat de votre commande dans la rubique historique des commandes </Text>
       <View style={{alignItems:'flex-end'}}>
         <Pressable onPress={()=>props.navigation.navigate('Order Status')}>
-          <Text style={{paddingBottom:35,fontSize:18,color:'#C3C1C1'}}> Done</Text>
+          <Text style={{paddingBottom:25,fontSize:18,color:'#C3C1C1',paddingTop:10}}> Done</Text>
         </Pressable>
       </View>
       
@@ -455,7 +471,7 @@ function OrderStatuScreen (props){
   return (
     <View style={{flex:1}}>
         <View style={{flex:1.20,backgroundColor:'#FAFAFA',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',justifyContent:'center',}}>
-            <View style={{marginLeft:24,marginRight:22,flexDirection:'row',marginTop:20}}>
+            <View style={{marginLeft:24,marginRight:22,flexDirection:'row'}}>
                 <View>
                     <Text style={{fontSize:16,color:'#3F4D5F',marginBottom:6}}>
                         Aujourd'hui
@@ -473,7 +489,7 @@ function OrderStatuScreen (props){
             </View>
         </View>
 
-        <View style={{flex:1,backgroundColor:'#FFF',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',}}>
+        <View style={{flex:1.5,backgroundColor:'#FFF',borderBottomWidth:2,borderStyle:'solid',borderColor:'#F2F2F2',}}>
             <Text style={{marginLeft:24,marginRight:51,marginBottom:5,fontSize:16,color:'#3F4D5F'}}>
               Etat de la Commande
             </Text>
@@ -530,7 +546,7 @@ function OrderStatuScreen (props){
                       <Text style={{fontSize:12,color:'#3F4D5F',marginBottom:3}}>
                           Banane Malaxee
                       </Text>
-                      <Text style={{fontSize:12,color:'#3F4D5F',paddingBottom:12}}>
+                      <Text style={{fontSize:12,color:'#3F4D5F'}}>
                           Cout Total: 2.500 Francs CFA
                       </Text>
                   </View>
@@ -675,9 +691,11 @@ function TrackingMapScreen (){
     </View>
   );
 }
-function DessertScreen (){
+export function OrderStatusScreen (){
 
   //google.navigation:q=latitude,longitude
+  //http://maps.apple.com/?ll=37.484847,-122.148386%22
+  //"geo:37.484847,-122.148386" 
   const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?daddr=' });
 const latLng = `${37.3382082},${-121.8863286}`;
 const label = 'Tchopallo';
@@ -690,9 +708,10 @@ Linking.openURL(url);
   return <Text> dessert is good for digestion... deal with it .........</Text>
 }
 
-function RaffraichissementScreen (){
+export function WebViewScreen (){
   return <WebView
-  source={{ uri: 'https://infinite.red' }}
+  source={{ uri: 'https://infinite.red' 
+}}
   style={{ marginTop: 20 }}
 /> 
 }
@@ -790,12 +809,29 @@ function OrderDetailScreen (props){
             </View>
             <View style={{flex:1,borderColor:'#F2F2F2',borderTopWidth:2,borderStyle:'solid',paddingBottom:35,paddingLeft:24,paddingTop:29, paddingRight:19,backgroundColor:'#FAFAFA',borderBottomLeftRadius:8,borderBottomRightRadius:8}}>
                 <Text style={{fontSize:16,color:'#3F4D5F',paddingBottom:5,textAlign:'center',fontWeight:'500'}}> Choisissez l'addresse à laquelle vous: {textCommand} </Text>
-                <Text style={{fontSize:12,color:'#3F4D5F',paddingBottom:17}}> Chapallo de Deido 416 Rue Essaka ...</Text>
+
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25,marginTop:15}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}> Chapallo de Deido 416 Rue Essaka ...</Text>
+              </View>
+              
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}>TchopAllo Tradex Rhones Poulenc...</Text>
+              </View>
+              
+              <View style={{alignItems:'center',flexDirection:'row',paddingBottom:17,paddingLeft:25}}>
+                <Image source={typeCommand=== 'livraison'? radioSelected: radio} style={{marginRight:6}}/>
+                <Text style={{fontSize:12,color:'#3F4D5F'}}>A votre Position</Text>
+              </View>
+
                
-               <View style={{flexDirection:'row',paddingBottom:29}}>
+               <Pressable onPress={()=>alert('Je ne sais pas...')}>
+               <View style={{flexDirection:'row',paddingBottom:29,paddingLeft:46,alignItems:'center'}}>
                   <Image source={addRed} style={{marginRight:6}}/> 
                   <Text style={{color:'#F23445',fontSize:12,flex:1}}>Add New Address</Text>
                 </View>
+                </Pressable>
             </View>
       </View>
 
@@ -870,14 +906,14 @@ function OrderDetailScreen (props){
           <Text style={{color:'#3F4D5F',paddingBottom:21,fontWeight:'bold',textAlign:'center'}}>Quand et A Quelle Heure souhaiteriez vous : {textCommand}</Text>
               <View style={{marginLeft:45}}>
                     <Pressable onPress= {()=> setTempsLivraison('AussiTot')} >
-                      <View style={{flexDirection:'row',marginBottom:31}}>
+                      <View style={{flexDirection:'row',marginBottom:31,alignItems:'center'}}>
                           <Image source={tempsLivraison === 'AussiTot'? radioSelected: radio} />
                           <Text style={{textAlign:'center',fontSize:14,color:tempsLivraison === 'AussiTot'? '#F23445': '#3F4D5F'}}> AussiTot Que Possible (estimee A 1 (Une) Heure de Temps </Text>
                       </View>
                     </Pressable>
 
                     <Pressable onPress={() => setTempsLivraison('Plus Tard')}>
-                      <View style={{flexDirection:'row'}}>
+                      <View style={{flexDirection:'row',alignItems:'center'}}>
                           <Image source={tempsLivraison === 'AussiTot'?  radio: radioSelected} />
                           <Text style={{textAlign:'center',fontSize:14,color:tempsLivraison === 'AussiTot'? '#3F4D5F' : '#F23445' }}> Choisir un jour et une heure de Livraison</Text>
                       </View>
@@ -963,7 +999,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 //Tab.Navigator
 //Tab.Screen
-function MyTabs() {
+function MyTabs(props) {
   return (
     <Stack.Navigator 
       screenOptions ={{
@@ -980,9 +1016,8 @@ function MyTabs() {
         labelStyle: {color:'white'},
       }}
     > 
-    
       <Stack.Screen 
-      name="Home" component={HomeScreen}  
+      name="Home" 
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: () => (
@@ -993,7 +1028,10 @@ function MyTabs() {
             />
           ),
         }}
-      />
+      >
+        {() => <HomeScreen data={props.data? props.data:grillKeys} />}
+      </Stack.Screen>
+
       <Stack.Screen name="Order Confirmation" component={OrderConfirmationScreen}  
         options={{
           tabBarLabel: 'Confirmation de la Commande ',
@@ -1030,19 +1068,7 @@ function MyTabs() {
           ),
         }}
       />
-      <Stack.Screen name="Desserts" component={DessertScreen}  
-        options={{
-          tabBarLabel: 'Desserts',
-          tabBarIcon: () => (
-            <Image
-              fadeDuration={0}
-              style={{width: 22, height: 22}}
-              source={desserts}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen name="Raffraichissement" component={RaffraichissementScreen}  
+      <Stack.Screen name="WebViewScreen" component={WebViewScreen}  
         options={{
           tabBarLabel: 'Raffraichissements',
           tabBarIcon: () => (
@@ -1068,6 +1094,49 @@ function MyTabs() {
           ),
         }}
       />
+      <Stack.Screen
+        name="Drinks"
+        component={Drinks}
+        options={{
+          tabBarLabel: 'Drinks',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Commande"
+        component={CartScreen}
+        options={{
+          tabBarLabel: 'Commande',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="EntrtyPoint"
+        component={EntrtyPoint}
+        options={{
+          tabBarLabel: 'EntrtyPoint',
+          tabBarIcon: () => (
+            <Image
+              fadeDuration={0}
+              style={{width: 22, height: 22}}
+              source={cocktail}
+            />
+          ),
+        }}
+      />
+      
     </Stack.Navigator>
   );
 }

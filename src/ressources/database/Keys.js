@@ -1,171 +1,70 @@
-/*const Keys= {
-    drink: {
-        biere:{
-              guiness : [
-                    {name:'Petite Guiness',code:'pg',stock: 35, prix:1000},
-                    {name:'Grande Guiness',code:'gg',stock: 1, prix:1500},
-                    {name:'Ice Black',code:'ib',stock: 13, prix:1000},
-                    {name:'Ice Ananas',code:'ia',stock: 16, prix:1000},
-                    {name:'Smooth',code:'sm',stock: 6, prix:1000},
-                    {name:'Harp',code:'hrp',stock: 4, prix:1000},
-                    {name:'Origin',code:'og',stock: 4, prix:1000},
-                    {name:'Malta',code:'mlta',stock: 15, prix:1000},
-                ],
-            
-              brasserie : [
-                    {name:'Tonic',code: 'tc',stock: 18, prix:1000},
-                    {name:'Beaufort Ordinaire',code: 'bo',stock: 6, prix:1000},
-                    {name:'Beaufort Light',code: 'bl',stock: 6, prix:1000},
-                    {name:'Beaufort Tango',code: 'bt',stock: 6, prix:1000},
-                    {name:'33 Export',code: 'exp',stock: 6, prix:1000},
-                    {name:'Castel',code: 'cast',stock: 3, prix:1000},
-                    {name:'Chill',code: 'chl',stock: 7, prix:1000},
-                    {name:'Soda',code: 'sda',stock: 4, prix:1000},
-                    {name:'Booster',code: 'bster',stock: 4, prix:1000},
-                    {name:'Mutzig',code: 'mtz',stock: 4, prix:1000},
-                    {name:'UCB',code: 'ucb',stock: 4, prix:1000},
-                    {name:'Magnan',code: 'mgn',stock: 4, prix:1000},
-                ],
-
-              ucb : [
-                    {name:'Kadji',code: 'kj',stock: 4, prix:1000},
-                ],
-        },
-        top:[
-            {name:'Ananas',code: 'ananas',stock: 7, prix:1000,key: 'ananas'},
-            {name:'Coca Cola',code: 'coca',stock: 7, prix:1000,key: 'coca'},
-            {name:'Orange',code: 'org',stock: 7, prix:1000,key: 'org'},
-            {name:'Grenadine',code: 'grde',stock: 7, prix:1000,key: 'grde'},
-            {name:'Vimto',code: 'vmt',stock: 7, prix:1000,key: 'vmt'},
-            {name:'Djino',code: 'djin',stock: 7, prix:1000,key: 'djin'},
-            {name:'pamplemouse',code: 'pmpls',stock: 7, prix:1000,key: 'pmpls'},
-            {name:'Orangina',code: 'orgina',stock: 7, prix:1000,key: 'orgina'},
-        ],
-        etrangere: [
-            {name:'Heineken',code: 'hnk',stock: 7, prix:1000},
-            {name:'1664',code: 'sz',stock: 4, prix:1000},
-        ],
-        eau:[
-            {name:'Supermont',code: 'sprmt',stock: 7, prix:1000},
-        ],
-        naturel:[
-            {name:'Fleur d"oseil- Folere',code: 'oseil',stock: 7, prix:500},
-            {name:'Gingenbre',code: 'djindja',stock: 7, prix:500},
-            {name:'Ananas',code: 'ananas',stock: 7, prix:1000/1500},
-            {name:'Goyave',code: 'gyve',stock: 7, prix:1000/1500},
-            {name:'Mangue',code: 'mgue',stock: 7, prix:1000/1500},
-            {name:'Papaye',code: 'ppy',stock: 7, prix:1000/1500},
-            {name:'Orange',code: 'org',stock: 7, prix:1000/1500},
-            {name:'Citron',code: 'ctr',stock: 7, prix:1000/1500},
-            {name:'Limonade',code: 'lmd',stock: 7, prix:1000/1500},
-            {name:'Pasteque',code: 'pstk',stock: 7, prix:1000/1500},
-        ],
-        liqueur :[
-                    {name:'JW Black',code: 'blk',stock: 7, prix:25000},
-                    {name:'Baileys 75 CL',code: 'blk',stock: 7, prix:15000},
-                    {name:'Baileys Delight',code: 'blk',stock: 7, prix:15000},
-                    {name:'J&B 75 Cl',code: 'jnb',stock: 7, prix:15000},
-                    {name:'JW Red 75 CL',code: 'red',stock: 7, prix:15000},
-                    {name:'JW Platinum',code: 'pltnm ',stock: 7, prix:90000},
-                    {name:'JW Gold Reserved ',code: 'gld',stock: 7, prix:70000},
-                    {name:'DTown-Singleton',code: 'sglt',stock: 7, prix:35000},
-                    {name:'Zapaca',code: 'zpca',stock: 7, prix:90000},
-                    {name:'Cardhuc',code: 'crdc',stock: 7, prix:50000},
-                    {name:'Blue Label',code: 'blue-lbl',stock: 7, prix:20000},
-                    {name:'Ciroc',code: 'crc',stock: 7, prix:35000},
-                    {name:'Black & White ',code: 'blk-white',stock: 7, prix:15000},
-                    {name:'Gordon Gin Dry',code: 'gin',stock: 7, prix:15000},
-                    {name:'Tanqueray',code: 'tqr',stock: 7, prix:25000},
-                    {name:'White Horse',code: 'w-hrs',stock: 7, prix:15000},
-                    {name:'VAT 69',code: 'vat',stock: 7, prix:15000},
-                    {name:'Dimple ',code: 'dmpl',stock: 7, prix:50000},
-                    {name:'Captain Morgan',code: 'mrg',stock: 7, prix:15000},
-                    {name:'Smirnoff Red ',code: 'smr-red',stock: 7, prix:15000},
-                    {name:'Smirnoff  Black',code: 'smr-blk',stock: 7, prix:15000},
-                    {name:'Captain Morgan',code: 'mrg',stock: 7, prix:15000},
-                    {name:'Green Label',code: 'grn-lbl',stock: 7, prix:70000},
-                    {name:'Guiness  Triple Black',code: 'gns-triple-blk',stock: 7, prix:15000},
-                
-        ],
-        vin: [],
-    },    
-    'fast food':[],
-}*/
-
-
-export const  drinkKeys = [
+export const  drinkKeys = {
   
-    {
-      id: 'Biere',
-      data:  [
+      Biere:  [
         {
           title: "Guiness",
-          data: [ {name:'Petite Guiness',code:'pg',stock: 35, prix:1000},
-          {name:'Grande Guiness',code:'gg',stock: 1, prix:1500},
-          {name:'Ice Black',code:'ib',stock: 13, prix:1000},
-          {name:'Ice Ananas',code:'ia',stock: 16, prix:1000},
-          {name:'Smooth',code:'sm',stock: 6, prix:1000},
-          {name:'Harp',code:'hrp',stock: 4, prix:1000},
-          {name:'Origin',code:'og',stock: 4, prix:1000},
-          {name:'Malta',code:'mlta',stock: 15, prix:1000},]
+          data: [ {name:'Petite Guiness',code:'pg',stock: 35, prix:1000,description:'Fait a base de Malte depuis la generation de Michael Power ',category:'biere',souscategory:'Guiness'},
+          {name:'Grande Guiness',code:'gg',stock: 1, prix:1500,description:'Fait a base de Malte depuis la generation de Michael Power 85CL',category:'biere',souscategory:'Guiness'},
+          {name:'Ice Black',code:'ib',stock: 13, prix:1000,description:'Produit Guiness fait a base de vodka ',category:'biere',souscategory:'Guiness'},
+          {name:'Ice Ananas',code:'ia',stock: 16, prix:1000,description:'Produit Guiness gout Ananas',category:'biere',souscategory:'Guiness'},
+          {name:'Smooth',code:'sm',stock: 6, prix:1000,description:'Guiness Smooth pour une ambiance Smoothie et les moins power ',category:'biere',souscategory:'Guiness'},
+          {name:'Harp',code:'hrp',stock: 4, prix:1000,description:'Produit Guiness doux et fin, on a aussi pense aux femmes',category:'biere',souscategory:'Guiness'},
+          {name:'Origin',code:'og',stock: 4, prix:1000,description:'La seule biere qui maintient beaucoup au Cameroun',category:'biere',souscategory:'Guiness'},
+          {name:'Malta',code:'mlta',stock: 15, prix:1000,description:'La Guiness sucree pour les femmes',category:'biere',souscategory:'Guiness'},]
         },
   
         {
           title: "Brasseries",
-          data: [  {name:'Tonic',code: 'tc',stock: 18, prix:1000},
-          {name:'Beaufort Ordinaire',code: 'bo',stock: 6, prix:1000},
-          {name:'Beaufort Light',code: 'bl',stock: 6, prix:1000},
-          {name:'Beaufort Tango',code: 'bt',stock: 6, prix:1000},
-          {name:'33 Export',code: 'exp',stock: 6, prix:1000},
-          {name:'Castel',code: 'cast',stock: 3, prix:1000},
-          {name:'Chill',code: 'chl',stock: 7, prix:1000},
-          {name:'Soda',code: 'sda',stock: 4, prix:1000},
-          {name:'Booster',code: 'bster',stock: 4, prix:1000},
-          {name:'Mutzig',code: 'mtz',stock: 4, prix:1000},
-          {name:'UCB',code: 'ucb',stock: 4, prix:1000},
-          {name:'Magnan',code: 'mgn',stock: 4, prix:1000},]
+          data: [  {name:'Tonic',code: 'tc',stock: 18, prix:1000,description:'Boisson gaseuze transparente et legerement sucre avec un peu de lemon ',category:'biere',souscategory:'Brasseries'},
+          {name:'Beaufort Ordinaire',code: 'bo',stock: 6, prix:1000,description:'La Biere des connaisseurs',category:'biere',souscategory:'Brasseries'},
+          {name:'Beaufort Light',code: 'bl',stock: 6, prix:1000,description:'Tout le monde n"est pas fort ordinairement, certains sont lights... ',category:'biere',souscategory:'Brasseries'},
+          {name:'Beaufort Tango',code: 'bt',stock: 6, prix:1000,description:'Du bon Tango pour les connaisseurs des Beaux et forts ',category:'biere',souscategory:'Brasseries'},
+          {name:'33 Export',code: 'exp',stock: 6, prix:1000,description:'Supporter numero 1 du FootBall ',category:'biere',souscategory:'Brasseries'},
+          {name:'Castel',code: 'cast',stock: 3, prix:1000,description:'Fingon et toi nous procurez toujours de la bonne humeur',category:'biere',souscategory:'Brasseries'},
+          {name:'Chill',code: 'chl',stock: 7, prix:1000,description:'Fait base de lemon... d"une douceur impecable...  ',category:'biere',souscategory:'Brasseries'},
+          {name:'Soda',code: 'sda',stock: 4, prix:1000,description:'Grand frere du Tonic sans sucre pour les diabetiques ',category:'biere',souscategory:'Brasseries'},
+          {name:'Booster',code: 'bster',stock: 4, prix:1000,description:'Booster les vies... ',category:'biere',souscategory:'Brasseries'},
+          {name:'Mutzig',code: 'mtz',stock: 4, prix:1000,description:'une bonne Mutzig pour les danseurs.',category:'biere',souscategory:'Brasseries'},
+          {name:'UCB',code: 'ucb',stock: 4, prix:1000,description:'le Gout de la reussite... meme saveur apres plus de 20 ans',category:'biere',souscategory:'Brasseries'},
+          {name:'Magnan',code: 'mgn',stock: 4, prix:1000,description:'Le capitain a fait ses preuves et la biere la symbolise vraiment ce qu"elle represente',category:'biere',souscategory:'Brasseries'},]
         },
         {
           title:'UCB',
               data : [
-                  {name:'Kadji',code: 'kj',stock: 4, prix:1000},
+                  {name:'Kadji',code: 'kj',stock: 4, prix:1000,description:'Il y"a les bieres et la Kadji ',category:'biere',souscategory:'ucb'},
           ],
       },
       {
           title:'Etrangeres',
               data : [
-                  {name:'Heineken',code: 'hnk',stock: 7, prix:1000},
-                  {name:'1664',code: 'sz',stock: 4, prix:1000},
+                  {name:'Heineken',code: 'hnk',stock: 7, prix:1000,description:'Supporter numero 1 de la Champions League',category:'biere',souscategory:'etrangeres'},
+                  {name:'1664',code: 'sz',stock: 4, prix:1000,description:'Jamais loin de la Heineken',category:'biere',souscategory:'etrangeres'},
           ],
       },
   
-    ]},
-    {
-      id: 'eau',
-      data:  [
+    ],
+    Eau:  [
         {
           title: "simple",
-          data: [{name:'Supermont',code: 'sprmt',stock: 7, prix:1000},
-          {name:'Eau Pure',code: 'opur',stock: 7, prix:1000},
-          {name:'Tangui',code: 'tgui',stock: 7, prix:1000},]
+          data: [{name:'Supermont',code: 'sprmt',stock: 7, prix:1000,description:'Super des Monts',category:'eau',souscategory:'simple'},
+          {name:'Eau Pure',code: 'opur',stock: 7, prix:1000,description:'O des pures ',category:'eau',souscategory:'simple'},
+          {name:'Tangui',code: 'tgui',stock: 7, prix:1000,description:'nkoukouma des eaux minerales ',category:'eau',souscategory:'simple'},]
         },
-    ]},
-    {
-      id:'JUS',
-      data:[
+    ],
+    Jus:[
         {
           title:'NATURELS',
           data: [
-              {name:'Fleur d"oseil- Folere',code: 'oseil',stock: 7, prix:500},
-              {name:'Gingenbre',code: 'djindja',stock: 7, prix:500},
-              {name:'Ananas',code: 'ananas',stock: 7, prix:1000/1500},
-              {name:'Goyave',code: 'gyve',stock: 7, prix:1000/1500},
-              {name:'Mangue',code: 'mgue',stock: 7, prix:1000/1500},
-              {name:'Papaye',code: 'ppy',stock: 7, prix:1000/1500},
-              {name:'Orange',code: 'org',stock: 7, prix:1000/1500},
-              {name:'Citron',code: 'ctr',stock: 7, prix:1000/1500},
-              {name:'Limonade',code: 'lmd',stock: 7, prix:1000/1500},
-              {name:'Pasteque',code: 'pstk',stock: 7, prix:1000/1500},
+              {name:'Fleur d"oseil- Folere',code: 'oseil',stock: 7, prix:500,description:'fait a base des fleurs d"oseil',category:'jus',souscategory:'naturel'},
+              {name:'Gingenbre',code: 'djindja',stock: 7, prix:500,description:'fait a base de gingenbre ',category:'jus',souscategory:'naturel'},
+              {name:'Ananas',code: 'ananas',stock: 7, prix:1000/1500,description:'fait a base d"ananas organiques ',category:'jus',souscategory:'naturel'},
+              {name:'Goyave',code: 'gyve',stock: 7, prix:1000/1500,description:'Les goyaves ont soufferts ',category:'jus',souscategory:'naturel'},
+              {name:'Mangue',code: 'mgue',stock: 7, prix:1000/1500,description:'Grace aux grimpeurs et a la saison favorable ',category:'jus',souscategory:'naturel'},
+              {name:'Papaye',code: 'ppy',stock: 7, prix:1000/1500,description:'la solo nous a inspire',category:'jus',souscategory:'naturel'},
+              {name:'Orange',code: 'org',stock: 7, prix:1000/1500,description:'on les a presse avec soins.... en pensant a....',category:'jus',souscategory:'naturel'},
+              {name:'Citron',code: 'ctr',stock: 7, prix:1000/1500,description:'Perdre du poids ne doit pas etre un supplice..',category:'jus',souscategory:'naturel'},
+              {name:'Limonade',code: 'lmd',stock: 7, prix:1000/1500,description:'fait a base de lemon',category:'jus',souscategory:'naturel'},
+              {name:'Pasteque',code: 'pstk',stock: 7, prix:1000/1500,description:'Le naturel vous procure de l"energie ',category:'jus',souscategory:'naturel'},
           ]
       },
       {
@@ -175,48 +74,44 @@ export const  drinkKeys = [
       {
         title:'Top',
             data : [
-                {name:'Ananas',code: 'ananas',stock: 7, prix:1000,key: 'ananas'},
-                {name:'Coca Cola',code: 'coca',stock: 7, prix:1000,key: 'coca'},
-                {name:'Orange',code: 'org',stock: 7, prix:1000,key: 'org'},
-                {name:'Grenadine',code: 'grde',stock: 7, prix:1000,key: 'grde'},
-                {name:'Vimto',code: 'vmt',stock: 7, prix:1000,key: 'vmt'},
-                {name:'Djino',code: 'djin',stock: 7, prix:1000,key: 'djin'},
-                {name:'pamplemouse',code: 'pmpls',stock: 7, prix:1000,key: 'pmpls'},
-                {name:'Orangina',code: 'orgina',stock: 7, prix:1000,key: 'orgina'},
+                {name:'Ananas',code: 'ananas',stock: 7, prix:1000,key: 'ananas',description:'Jus gazeux a arome d"ananas ',category:'jus',souscategory:'top'},
+                {name:'Coca Cola',code: 'coca',stock: 7, prix:1000,key: 'coca',description:'Merci a Pablo ',category:'jus',souscategory:'top'},
+                {name:'Orange',code: 'org',stock: 7, prix:1000,key: 'org',description:'Jus gazeux fait avec arome d"orange ',category:'jus',souscategory:'top'},
+                {name:'Grenadine',code: 'grde',stock: 7, prix:1000,key: 'grde',description:'Jus gazeux',category:'jus',souscategory:'top'},
+                {name:'Vimto',code: 'vmt',stock: 7, prix:1000,key: 'vmt',description:'la redefinition du mot Jus ',category:'jus',souscategory:'top'},
+                {name:'Djino',code: 'djin',stock: 7, prix:1000,key: 'djin',description:' Les cocktails prouvent que l"union fait la force',category:'jus',souscategory:'top'},
+                {name:'pamplemouse',code: 'pmpls',stock: 7, prix:1000,key: 'pmpls',description:'fait a base de Pamplemousse',category:'jus',souscategory:'top'},
+                {name:'Orangina',code: 'orgina',stock: 7, prix:1000,key: 'orgina',description:'Avc quelques pulpes pour garder la saveur... ',category:'jus',souscategory:'top'},
         ],
     },
   ],
-    },
-    {
-      id: 'Liqueur',
-      data:  [
+      Liqueur:  [
         {
           title: "Guiness",
           data: [
-            {name:'JW Black',code: 'blk',stock: 7, prix:25000},
-            {name:'Baileys 75 CL',code: 'blk',stock: 7, prix:15000},
-            {name:'Baileys Delight',code: 'blk',stock: 7, prix:15000},
-            {name:'J&B 75 Cl',code: 'jnb',stock: 7, prix:15000},
-            {name:'JW Red 75 CL',code: 'red',stock: 7, prix:15000},
-            {name:'JW Platinum',code: 'pltnm ',stock: 7, prix:90000},
-            {name:'JW Gold Reserved ',code: 'gld',stock: 7, prix:70000},
-            {name:'DTown-Singleton',code: 'sglt',stock: 7, prix:35000},
-            {name:'Zapaca',code: 'zpca',stock: 7, prix:90000},
-            {name:'Cardhuc',code: 'crdc',stock: 7, prix:50000},
-            {name:'Blue Label',code: 'blue-lbl',stock: 7, prix:20000},
-            {name:'Ciroc',code: 'crc',stock: 7, prix:35000},
-            {name:'Black & White ',code: 'blk-white',stock: 7, prix:15000},
-            {name:'Gordon Gin Dry',code: 'gin',stock: 7, prix:15000},
-            {name:'Tanqueray',code: 'tqr',stock: 7, prix:25000},
-            {name:'White Horse',code: 'w-hrs',stock: 7, prix:15000},
-            {name:'VAT 69',code: 'vat',stock: 7, prix:15000},
-            {name:'Dimple ',code: 'dmpl',stock: 7, prix:50000},
-            {name:'Captain Morgan',code: 'mrg',stock: 7, prix:15000},
-            {name:'Smirnoff Red ',code: 'smr-red',stock: 7, prix:15000},
-            {name:'Smirnoff  Black',code: 'smr-blk',stock: 7, prix:15000},
-            {name:'Captain Morgan',code: 'mrg',stock: 7, prix:15000},
-            {name:'Green Label',code: 'grn-lbl',stock: 7, prix:70000},
-            {name:'Guiness  Triple Black',code: 'gns-triple-blk',stock: 7, prix:15000},
+            {name:'JW Black',code: 'blk',stock: 7, prix:25000,description:'Liqueur de JW Black .... ',category:'liqueur',souscategory:'Guiness'},
+            {name:'Baileys 75 CL',code: 'blk',stock: 7, prix:15000,description:'Fait a base de lait et de whisky ',category:'liqueur',souscategory:'Guiness'},
+            {name:'Baileys Delight',code: 'blk',stock: 7, prix:15000,description:'Fait a base de wishky et de lait avec une faible concentration en alcool ',category:'liqueur',souscategory:'Guiness'},
+            {name:'J&B 75 Cl',code: 'jnb',stock: 7, prix:15000,description:'J&B',category:'liqueur',souscategory:'Guiness'},
+            {name:'JW Red 75 CL',code: 'red',stock: 7, prix:15000,description:'JW Red',category:'liqueur',souscategory:'Guiness'},
+            {name:'JW Platinum',code: 'pltnm ',stock: 7, prix:90000,description:'JW Platinum ',category:'liqueur',souscategory:'Guiness'},
+            {name:'JW Gold Reserved ',code: 'gld',stock: 7, prix:70000,description:'JW Gold Reserved ',category:'liqueur',souscategory:'Guiness'},
+            {name:'DTown-Singleton',code: 'sglt',stock: 7, prix:35000,description:'DTown-Singleton',category:'liqueur',souscategory:'Guiness'},
+            {name:'Zapaca',code: 'zpca',stock: 7, prix:90000,description:'Zapaca',category:'liqueur',souscategory:'Guiness'},
+            {name:'Cardhuc',code: 'crdc',stock: 7, prix:50000,description:'Cardhuc ',category:'liqueur',souscategory:'Guiness'},
+            {name:'Blue Label',code: 'blue-lbl',stock: 7, prix:20000,description:'Blue Label ',category:'liqueur',souscategory:'Guiness'},
+            {name:'Ciroc',code: 'crc',stock: 7, prix:35000,description:'Ciroc',category:'liqueur',souscategory:'Guiness'},
+            {name:'Black & White ',code: 'blk-white',stock: 7, prix:15000,description:'Black And White',category:'liqueur',souscategory:'Guiness'},
+            {name:'Gordon Gin Dry',code: 'gin',stock: 7, prix:15000,description:'Gordon Gin Dry',category:'liqueur',souscategory:'Guiness'},
+            {name:'Tanqueray',code: 'tqr',stock: 7, prix:25000,description:'Tanqueray',category:'liqueur',souscategory:'Guiness'},
+            {name:'White Horse',code: 'w-hrs',stock: 7, prix:15000,description:'White Horse',category:'liqueur',souscategory:'Guiness'},
+            {name:'VAT 69',code: 'vat',stock: 7, prix:15000,description:'VAT 69',category:'liqueur',souscategory:'Guiness'},
+            {name:'Dimple ',code: 'dmpl',stock: 7, prix:50000,description:'Dimple ',category:'liqueur',souscategory:'Guiness'},
+            {name:'Captain Morgan',code: 'mrg',stock: 7, prix:15000,description:'Captain Morgan 65CL',category:'liqueur',souscategory:'Guiness'},
+            {name:'Smirnoff Red ',code: 'smr-red',stock: 7, prix:15000,description:'Smirnoff Red',category:'liqueur',souscategory:'Guiness'},
+            {name:'Smirnoff  Black',code: 'smr-blk',stock: 7, prix:15000,description:'Smirnoff Black',category:'liqueur',souscategory:'Guiness'},
+            {name:'Green Label',code: 'grn-lbl',stock: 7, prix:70000,description:'Green Label',category:'liqueur',souscategory:'Guiness'},
+            {name:'Guiness  Triple Black',code: 'gns-triple-blk',stock: 7, prix:15000,description:'Guiness Triple Black',category:'liqueur',souscategory:'Guiness'},
           ]
         },
         {
@@ -227,21 +122,19 @@ export const  drinkKeys = [
           title:'Importes',
           data:[]
         }
-    ]},
-    {
-      id:'Vin',
-      data:[
+    ],
+      Vin:[
         {
           title:'locaux',
           data:[
-            {name:'Bordeaux',code: 'brdo',stock: 7, prix:15000},
+            {name:'Bordeaux',code: 'brdo',stock: 7, prix:15000,description:'Vin rouge fait a base de raisin fermente',category:'Vin',souscategory:'locaux'},
           ]
         },
         {
           title:'traditionel',
           data:[
-            {name:'Matango',code: 'mtgo',stock: 7, prix:15000},
-            {name:'Odontol',code: 'odontl',stock: 7, prix:15000},
+            {name:'Matango',code: 'mtgo',stock: 7, prix:15000,description:'Vin de palme ou rafia fermente',category:'vin',souscategory:'traditionel'},
+            {name:'Odontol',code: 'odontl',stock: 7, prix:15000,description:'Vin de mais fermente',category:'vin',souscategory:'traditionel'},
           ]
         },
         {
@@ -251,9 +144,8 @@ export const  drinkKeys = [
           ]
         }
       ]
-    }
-  ];
-export const  platsKeys=[
+};
+export const  platsKeys=[ 
     {
         title:'accompagnement',
         data : [
@@ -456,4 +348,6 @@ export const  pdjeuner=[
     
 ];
 //ORDRE PDJ, ENTREES, PLATS CHAUDS , DESSERTS , RAFFRAICHISSEMENT ...  FAST FOOD...
+const Keys = {pdjeuner,dessertsKeys,entreesKeys,grillKeys,platsKeys,drinkKeys};
+export default Keys;
 //export default Keys;

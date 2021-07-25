@@ -10,7 +10,10 @@ import {Text,Image,View} from 'react-native';
 import cart from './src/ressources/images/cart.png';
 
 import 'react-native-gesture-handler';
-import MyTabs from './src/navigations/Bottom/MyTabs';
+import Keys from './src/ressources/database/Keys';
+
+import BottomNavigation from './src/navigations/Bottom/BottomNavigation';
+
 import { NavigationContainer } from '@react-navigation/native'; 
 import ThingsContext, { ThingsProvider } from './thingsContext';
 
@@ -23,14 +26,10 @@ const things = [
 ]
 //toggleTheme: () => {},
 let result =[];
-
-function EntrtyPoint(props) {
+export function EntrtyPoint(props) {
     const [ order, setOrder ] = useState({});
     const [ groupList, setGroupList] = useState([]);
-    const addingItems = () =>{
-     console.log("voici la valeur du tableau...")
-    }
-
+    
     const  filterObjects = (objects) =>{
       var filtered = {};
       var keys = Object.keys(objects);
@@ -54,19 +53,17 @@ function EntrtyPoint(props) {
       hash = valeur.reduce((p,c) => (p[c.category] ? p[c.category].push(c) : p[c.category] = [c],p) ,{}),
        newData = Object.keys(hash).map(k => ({title: k, data: hash[k]}));
        setGroupList(newData);
-       console.log('newData',JSON.stringify(newData)); 
     }
-    
     return (
       <NavigationContainer>
-        <Pressable onPress={() => props.navigation.navigate("Entrees")}>
+        <Pressable onPress={() => console.log('in props from index... ',order)}>
           <View styl={{justifyContent:'flex-end',alignItems:'flex-end',flex:1}}>
               <Text style={{color:'red',textAlign:'right',marginRight:25,marginTop:15}}>{Object.keys(order).length}</Text>
               <ImageBackground source={cart}  style={{width:20,height:20,alignSelf:'flex-end',marginRight:25,marginBottom:5}}/>
           </View>
         </Pressable>
-        <ThingsProvider value={{order,groupList,toggleTheme}}>
-          <MyTabs func={addingItems} />
+        <ThingsProvider value={{order,groupList,toggleTheme,Keys}}>
+          <BottomNavigation />
         </ThingsProvider>
       </NavigationContainer>
     );
