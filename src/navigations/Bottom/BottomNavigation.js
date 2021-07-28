@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text,Image} from 'react-native';
 
-import MyTabs from  './MyTabs';
+import MyTabs,{TrackingMapScreen} from  './MyTabs';
 import  {WebViewScreen} from './MyTabs';
 import {OrderStatusScreen} from './MyTabs'
 import cocktail from  '../../ressources/images/cocktail.jpeg';
@@ -29,7 +29,7 @@ function PlatScreen (){
       <HomeScreen data={platsKeys} />
     );
     
-  }
+  } 
 
   function DessertScreen (){
     return (
@@ -151,7 +151,7 @@ function BottomNavigation() {
 
         <Tab.Screen
           name="Order Status"
-          component={OrderStatusScreen}
+          component={TrackingMapScreen}
           options={{
             tabBarLabel: 'Statut de la Commande',
             tabBarIcon: () => (
