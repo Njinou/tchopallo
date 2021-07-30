@@ -565,7 +565,7 @@ function OrderStatuScreen (props){
   );
 }
 
-function TrackingMapScreen (){
+export function TrackingMapScreen (){
   const [position, setPosition] = useState({
     latitude: 10,
     longitude: 10,
