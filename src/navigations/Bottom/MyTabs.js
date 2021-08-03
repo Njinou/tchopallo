@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {EntrtyPoint} from '../../../index';
-import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList} from 'react-native';
+import {Text,Image,StyleSheet,ScrollView,Pressable,Modal,Platform,Button,TextInput,Linking,FlatList, useColorScheme,SectionList, Alert,PermissionsAndroid,StatusBar,SafeAreaView, Dimensions} from 'react-native';
 import {View} from 'react-native';
 
 import React,{useState,useEffect,useContext} from 'react';
@@ -42,6 +42,8 @@ import { WebView } from 'react-native-webview';
 
 import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../ressources/database/Keys.js'
 
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+
 //PDJ => cocktail when checking out.... => Entrees => Vienoiserie tracking... => Plats pour le tracking et le temps....  => Dessert if maps...
 //  PdjScreen EntreeScreen VienoiserieScreen PlatScreen DessertScreen RaffraichissementScreen CocktailScreen
 
@@ -51,6 +53,9 @@ import { exp } from 'react-native/Libraries/Animated/Easing';
 import { CommonActions } from '@react-navigation/routers';
 
 import { useNavigation } from '@react-navigation/native';
+
+
+import foodKey from '../../ressources/foods/foodKeys.js';
 
 const TopNavigator = createMaterialTopTabNavigator();
 
@@ -262,6 +267,35 @@ export function HomeScreen (props){
     </View>
   );
 
+
+  const DATA = [
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      title: 'First Item',
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      title: 'Second Item',
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571e29d72',
+      title: 'Third Item',
+    },
+  ];
+
+  const renderItema = ({ item }) => (
+    <Item title={item.title} />
+  );
+
+      
+  const Item = ({ title }) => (
+    <View >
+      <Image source={cocaglass} style={{resizeMode:"contain",flex:1,marginRight:10,height: 170,
+            width: 200,borderTopLeftRadius:8,borderTopRightRadius:8,}}/>
+    </View>
+  );
+  
+
 const renderItem = ({ item }) => (
   <>
   <ScrollView>
@@ -276,7 +310,7 @@ const renderItem = ({ item }) => (
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.8,
       shadowRadius: 2,  
-      elevation: 5,
+     // elevation: 5,
      // marginLeft:39,
       //marginRight:36,
       borderBottomEndRadius:8,borderBottomStartRadius:8
@@ -315,18 +349,6 @@ const renderItem = ({ item }) => (
 your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 8218.6669921875, "dt": 41488, "prevDt": 54931}
 
 */
-const renderItemSectionList = ({data}) => (
-  <>
-  <Text>{JSON.stringify(data)}</Text>
-  <SectionList
-  sections={data}
-  keyExtractor={(item, index) => item + index}
-  renderItem={renderItem}
-   renderSectionHeader={({section}) => <Text  style={{fontSize: 32,
-    backgroundColor: "lightgray",textAlign:'center',fontWeight:'bold',color:'#585B00'}}>{section.title}</Text>}
-/>
-</>
-);
 
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
@@ -692,7 +714,6 @@ export function TrackingMapScreen (){
   );
 }
 export function OrderStatusScreen (){
-
   //google.navigation:q=latitude,longitude
   //http://maps.apple.com/?ll=37.484847,-122.148386%22
   //"geo:37.484847,-122.148386" 
@@ -709,11 +730,28 @@ Linking.openURL(url);
 }
 
 export function WebViewScreen (){
-  return <WebView
-  source={{ uri: 'https://infinite.red' 
-}}
-  style={{ marginTop: 20 }}
-/> 
+  
+  return  <MapView
+  style={styles.map}
+  initialRegion={{
+    latitude:  4.057668, 
+    longitude: 9.737302,
+    latitudeDelta: 0.0622,
+    longitudeDelta: 0.0121,
+    
+  }}
+    
+  onMapReady={() => {
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    ).then(granted => {
+      alert(granted) // just to ensure that permissions were granted
+    });
+  }}
+
+  scrollEnabled={true}
+  onPanDrag={e => onPanDrag(e)}
+  />
 }
 
 function OrderDetailScreen (props){
@@ -994,6 +1032,103 @@ function OrderDetailScreen (props){
   );
 }
 
+
+const requestCameraPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: "Cool Photo App Camera Permission",
+        message:
+          "Cool Photo App needs access to your camera " +
+          "so you can take awesome pictures.",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("You can use the camera");
+    } else {
+      console.log("Camera permission denied");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+export function PermissionScreen (){
+
+
+  if (Platform.OS === 'android'){
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+  .then((result) => {
+    switch (result) {
+      case RESULTS.UNAVAILABLE:
+        console.log('This feature is not available (on this device / in this context)');
+        break;
+      case RESULTS.DENIED:
+        console.log('The permission has not been requested / is denied but requestable');
+        break;
+      case RESULTS.LIMITED:
+        console.log('The permission is limited: some actions are possible');
+        break;
+      case RESULTS.GRANTED:
+        console.log('The permission is granted');
+        break;
+      case RESULTS.BLOCKED:
+        console.log('The permission is denied and not requestable anymore');
+        break;
+    }
+  })
+  .catch((error) => {
+    // …
+  });
+  }
+  else {
+    check(PERMISSIONS.IOS.LOCATION_ALWAYS)
+  .then((result) => {
+    switch (result) {
+      case RESULTS.UNAVAILABLE:
+        console.log('This feature is not available (on this device / in this context)');
+        break;
+      case RESULTS.DENIED:
+        console.log('The permission has not been requested / is denied but requestable');
+        break;
+      case RESULTS.LIMITED:
+        console.log('The permission is limited: some actions are possible');
+        break;
+      case RESULTS.GRANTED:
+        console.log('The permission is granted');
+        break;
+      case RESULTS.BLOCKED:
+        console.log('The permission is denied and not requestable anymore');
+        break;
+    }
+  })
+  .catch((error) => {
+    // …
+  });
+  }
+//FlatList avec parametre horizontal .....
+  return (
+    <View style={{
+      flex: 1,
+      justifyContent: "center",
+      paddingTop: StatusBar.currentHeight,
+      backgroundColor: "#ecf0f1",
+      padding: 8
+    }}>
+    <Text style={{
+      margin: 24,
+      fontSize: 18,
+      fontWeight: "bold",
+      textAlign: "center"
+    }}>Try permissions</Text>
+    <Button title="request permissions" onPress={requestCameraPermission} />
+  </View>
+  )
+}
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

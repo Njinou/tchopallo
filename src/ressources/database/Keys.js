@@ -145,7 +145,44 @@ export const  drinkKeys = {
         }
       ]
 };
+//					
+    //		
 export const  platsKeys=[ 
+
+  {
+    title:'mets',
+    data : [
+        {name:'Ekomba',code: 'mts-ekmb',stock: 7, prix:500,description:"Met d'arachide et de maïs",category:'plats',souscategory:'mets'},
+        {name:'arachide',code: 'mts-archd',stock: 7, prix:500,description:"Met d'arachide",category:'plats',souscategory:'mets'},
+        {name:'Ndomba',code: 'mts-ndomba',stock: 7, prix:500,description:'Met fait a base de Poisson',category:'plats',souscategory:'mets'},
+        {name:'pistache',code: 'mts-pstch',stock: 7, prix:500,description:'Met fait a base de graines de courges',category:'plats',souscategory:'mets'},
+   ],
+},
+
+{
+  title:'sauce',
+  //basquaise					
+  data : [
+      {name:'basquaise',code: 'sce-bsqz',stock: 7, prix:500,description:'Sauce Basquaise faite a base de tomate et de viande ',category:'plats',souscategory:'sauce'},
+      {name:'gombos',code: 'sce-gmb',stock: 7, prix:500,description:'Sauce Gombo',category:'plats',souscategory:'sauce'},
+      {name:'mbongo',code: 'sce-mbgo',stock: 7, prix:500,description:'Sauce Mbongo',category:'plats',souscategory:'sauce'},
+      {name:'pistache',code: 'sce-pstch',stock: 7, prix:500,description:'Sauce Pistache',category:'plats',souscategory:'sauce'},
+      {name:'Sauce Pistache gombo',code: 'pstch-gmbo',stock: 7, prix:1500,description:'Pistaches + gombo',category:'plats',souscategory:'sauce'},
+      {name:'arachide',code: 'sce-arch',stock: 7, prix:500,description:"Sauce d'arachides",category:'plats',souscategory:'sauce'},
+      {name:'tomate',code: 'sce-tmt',stock: 7, prix:500,description:'Sauce tomate',category:'plats',souscategory:'sauce'},
+ ],
+},
+
+{
+  title:'viandes',
+  data : [
+      {name:'rognon',code: 'vde-rgn',stock: 7, prix:500,description:'Rognon de boeufs',category:'plats',souscategory:'viandes'},
+      {name:'yassa',code: 'vde-yssa',stock: 7, prix:500,description:'Poulets Yassa',category:'plats',souscategory:'viandes'},
+      {name:'eminces',code: 'vde-emnc',stock: 7, prix:500,description:'éminces de boeuf',category:'plats',souscategory:'viandes'},
+ ],
+},
+
+
     {
         title:'accompagnement',
         data : [
@@ -171,7 +208,6 @@ export const  platsKeys=[
             {name:' Cotellettes de Porc à la Dijonnaise',code: 'ctlette-prc',stock: 7, prix:2000,description:'frits/vapeur',category:'plats',souscategory:'chapallo'},
             {name:'Medaillon de Porc',code: 'medaillon-prc',stock: 7, prix:2000,description:' Porc + plantain/ Pommes',category:'plats',souscategory:'chapallo'},
             {name:'Rognons Miboule',code: 'Rgn',stock: 7, prix:2000,description:' Rognon +  complements',category:'plats',souscategory:'chapallo'},
-            {name:'Ndole des princes Sawa',code: 'ndl',stock: 7, prix:2000,description:'Ndole + arachides + crevettes',category:'plats',souscategory:'chapallo'},
             {name:'1/4 Poulet yassa',code: 'plt-yssa',stock: 7, prix:2500-3000,description:'Poulet Yassa',category:'plats',souscategory:'chapallo'},
             {name:'Steak à la crême  champignons',code: 'crm-chmpgn',stock: 7, prix:3000,description:'Steak à la crême  champignons',category:'plats',souscategory:'chapallo'},
             {name:'Gambas Chapallo',code: 'gms-chplo',stock: 7, prix:5000-10000,description:'Gambas Chapallo',category:'plats',souscategory:'chapallo'},
@@ -179,33 +215,27 @@ export const  platsKeys=[
             ],
     },
     {
-        title:'traditionel',
+      /*
+      
+      bananemalaxe	ekwan		macabo		plantain	taro
+corntchap	kondre		pile		pommes
+      */
+        title:'feculent',
         data:[
-            {name:'Sauce jaune avec du Taro pilé',code: 'tro',stock: 7, prix:3500,description:'Taro Pilé + sauces Jaunes ',category:'plats',souscategory:'traditionel'},
-            {name:'Banane malaxée aux arachides trempées',code: 'bnn-mlx',stock: 7, prix:1500,description:'Banane + arachides trempées ',category:'plats',souscategory:'traditionel'},
-            {name:'Banane malaxée aux arachides grillés',code: 'bnn-grl',stock: 7, prix:1500,description:'Banane +  arachides grillés',category:'plats',souscategory:'traditionel'},
-            {name:'Sauce Mbongo Tchobi',code: 'mbgo',stock: 7, prix:2500,description:'Mbongo Tchobi',category:'plats',souscategory:'traditionel'},
-            {name:'Sauce Gombo',code: 'gmbo',stock: 7, prix:1500,description:'Gombo',category:'plats',souscategory:'traditionel'},
-            {name:'Sauce Pistache gombo',code: 'pstch-gmbo',stock: 7, prix:1500,description:'Pistaches + gombo',category:'plats',souscategory:'traditionel'},
-            {name:'Sauce Pistache',code: 'pstch',stock: 7, prix:2000,description:' Pistaches + ....+',category:'plats',souscategory:'traditionel'},
-            {name:'Couscous Djamts"eu',code: 'cscs-djm',stock: 7, prix:2000,description:'Couscous + Djamts"eu',category:'plats',souscategory:'traditionel'},
-            {name:'Macabo rapé aux arachides grillés',code: 'mkbo-rpe-grl',stock: 7, prix:1500,description:'Macabo rape + arachides grillés',category:'plats',souscategory:'traditionel'},
-            {name:'Macabo rapé aux arachides trempées',code: 'mkbo-rpe-trmp',stock: 7, prix:1500,description:'Macabo rape + arachides trempées',category:'plats',souscategory:'traditionel'},
-            {name:'Ekwang',code: 'ekwg',stock: 7, prix:3000,description:' Macabo + feuilles de taro',category:'plats',souscategory:'traditionel'},
-            {name:'Macabo malaxé au Ndole',code: 'mkbo-mlxe-ndl',stock: 7, prix:2500,description:'Macabo + Ndole',category:'plats',souscategory:'traditionel'},
-            {name:'Koki du Royaume Bamileke',code: 'kki',stock: 7, prix:1500,description:'Koki',category:'plats',souscategory:'traditionel'},
-            {name:'Tenue Militaire ou koki de Maïs',code: 'kki-ms',stock: 7, prix:2500,description:'Mais +  jeunes feuilles de taro',category:'plats',souscategory:'traditionel'},
-            {name:'Koki de Banane ',code: 'kki-bnn',stock: 7, prix:3000,description:'Bananes + jeunes feuilles de Taro',category:'plats',souscategory:'traditionel'},
-            {name:'Koki de Patate',code: 'kki-ptt',stock: 7, prix:3000,description:'Patate + Jeunes feuilles de taro',category:'plats',souscategory:'traditionel'},
-            {name:'Kondre de la Royaute Bamileke',code: 'kndr',stock: 7, prix:2500,description:' Plantains +... ',category:'plats',souscategory:'traditionel'},
-            {name:'Kontchap de Maïs',code: 'kntchp',stock: 7, prix:1500,description:' Maïs + haricots ',category:'plats',souscategory:'traditionel'},
-            {name:'Pepe Soup aux plantains',code: 'pp-Pltn',stock: 7, prix:2500,description:'Plantains',category:'plats',souscategory:'traditionel'},
-            {name:'Pile Pomme',code: 'pl-pm',stock: 7, prix:1500,description:'Pommes',category:'plats',souscategory:'traditionel'},
-            {name:'Pile patate',code: 'pl-ptt',stock: 7, prix:2500,description:'Patates',category:'plats',souscategory:'traditionel'},
-            {name:'Pile Macabo',code: 'pl-mkbo',stock: 7, prix:3000,description:' Macabos',category:'plats',souscategory:'traditionel'},
-            {name:'Pile Plantain',code: 'pl-pltn',stock: 7, prix:1500,description:'Pilés plantains',category:'plats',souscategory:'traditionel'},
-            {name:'Sauce Tomate',code: 'tmt',stock: 7, prix:2000,description:' plantains',category:'plats',souscategory:'traditionel'},
-            {name:'sauce d"arachide ',code: 'archd',stock: 7, prix:1500,description:'Arachides grilles',category:'plats',souscategory:'traditionel'},
+            {name:'Sauce jaune avec du Taro pilé',code: 'tro',stock: 7, prix:3500,description:'Taro Pilé + sauces Jaunes ',category:'plats',souscategory:'feculent'},
+            {name:'Banane malaxée aux arachides trempées',code: 'bnn-mlx',stock: 7, prix:1500,description:'Banane + arachides trempées ',category:'plats',souscategory:'feculent'},
+            {name:'Banane malaxée aux arachides grillés',code: 'bnn-grl',stock: 7, prix:1500,description:'Banane +  arachides grillés',category:'plats',souscategory:'feculent'},
+            {name:'Macabo rapé aux arachides grillés',code: 'mkbo-rpe-grl',stock: 7, prix:1500,description:'Macabo rape + arachides grillés',category:'plats',souscategory:'feculent'},
+            {name:'Macabo rapé aux arachides trempées',code: 'mkbo-rpe-trmp',stock: 7, prix:1500,description:'Macabo rape + arachides trempées',category:'plats',souscategory:'feculent'},
+            {name:'Ekwang',code: 'ekwg',stock: 7, prix:3000,description:' Macabo + feuilles de taro',category:'plats',souscategory:'feculent'},
+            {name:'Macabo malaxé au Ndole',code: 'mkbo-mlxe-ndl',stock: 7, prix:2500,description:'Macabo + Ndole',category:'plats',souscategory:'feculent'},
+             {name:'Kondre de la Royaute Bamileke',code: 'kndr',stock: 7, prix:2500,description:' Plantains +... ',category:'plats',souscategory:'feculent'},
+            {name:'Kontchap de Maïs',code: 'kntchp',stock: 7, prix:1500,description:' Maïs + haricots ',category:'plats',souscategory:'feculent'},
+            {name:'Pepe Soup aux plantains',code: 'pp-Pltn',stock: 7, prix:2500,description:'Plantains',category:'plats',souscategory:'feculent'},
+            {name:'Pile Pomme',code: 'pl-pm',stock: 7, prix:1500,description:'Pommes',category:'plats',souscategory:'feculent'},
+            {name:'Pile patate',code: 'pl-ptt',stock: 7, prix:2500,description:'Patates',category:'plats',souscategory:'feculent'},
+            {name:'Pile Macabo',code: 'pl-mkbo',stock: 7, prix:3000,description:' Macabos',category:'plats',souscategory:'feculent'},
+            {name:'Pile Plantain',code: 'pl-pltn',stock: 7, prix:1500,description:'Pilés plantains',category:'plats',souscategory:'feculent'},
         ],
     },
    
@@ -220,8 +250,29 @@ export const  platsKeys=[
             {name:'Okok sucre ',code: 'okok-scr',stock: 7, prix:1500,description:'Okok + arachides grilles',category:'plats',souscategory:'legume'},
             {name:'okok salé',code: 'okok-sale',stock: 7, prix:1500,description:'okok + arachides trempés',category:'plats',souscategory:'legume'},
             {name:'Zom sautés',code: 'zm-saute',stock: 7, prix:2500,description:'Zom saute',category:'plats',souscategory:'legume'},
+            {name:'Couscous Djamts"eu',code: 'cscs-djm',stock: 7, prix:2000,description:'Couscous + Djamts"eu',category:'plats',souscategory:'legume'},
         ],
-     }
+     },
+
+     {
+      title:'koki',
+      data:[
+        {name:'Koki du Royaume Bamileke',code: 'kki',stock: 7, prix:1500,description:'Koki',category:'plats',souscategory:'koki'},
+        {name:'Tenue Militaire ou koki de Maïs',code: 'kki-ms',stock: 7, prix:2500,description:'Mais +  jeunes feuilles de taro',category:'plats',souscategory:'koki'},
+        {name:'Koki de Banane ',code: 'kki-bnn',stock: 7, prix:3000,description:'Bananes + jeunes feuilles de Taro',category:'plats',souscategory:'koki'},
+        {name:'Koki de Patate',code: 'kki-ptt',stock: 7, prix:3000,description:'Patate + Jeunes feuilles de taro',category:'plats',souscategory:'koki'},
+     ],
+  },
+
+  {
+    title:'Fruits de mer',
+    data:[
+      {name:'Koki du Royaume Bamileke',code: 'kki',stock: 7, prix:1500,description:'Koki',category:'plats',souscategory:'koki'},
+      {name:'Tenue Militaire ou koki de Maïs',code: 'kki-ms',stock: 7, prix:2500,description:'Mais +  jeunes feuilles de taro',category:'plats',souscategory:'koki'},
+      {name:'Koki de Banane ',code: 'kki-bnn',stock: 7, prix:3000,description:'Bananes + jeunes feuilles de Taro',category:'plats',souscategory:'koki'},
+      {name:'Koki de Patate',code: 'kki-ptt',stock: 7, prix:3000,description:'Patate + Jeunes feuilles de taro',category:'plats',souscategory:'koki'},
+    ],
+  }
          
     ];
 
@@ -235,19 +286,28 @@ export const grillKeys =[
             {name:'Poulet braise',code: 'plt-brz',stock: 7, prix:7.000,description:'Poulet braise sur charbon',category:'grill',souscategory:'poulet'},
             {name:'Poulet frit',code: 'plt-frit',stock: 7, prix:6.000,description:'Poulet frit a l"huile',category:'grill',souscategory:'poulet'},
             {name:'Poulet roti',code: 'plt-roti',stock: 7, prix:6.000,description:'Poulet roti en machine',category:'grill',souscategory:'poulet'},
+
+            {name:'Brochettes de Poulet',code: 'plt-brcht',stock: 7, prix:2000,description:'brochettes faites à base de poulet',category:'grill',souscategory:'poulet'},
+            {name:'chawarma',code: 'plt-chwrm',stock: 7, prix:2000,description:'Poulet fume',category:'grill',souscategory:'poulet'},
         ],
     },
     {
         title:'boeuf',
         data:[{name:'Brochettes de Viandes de Boeuf',code: 'brchtte-bf',stock: 7, prix:500,description:'Brochettes de Boeuf',category:'grill',souscategory:'boeuf'},
-            {name:'Chawarmar  de Boeuf',code: 'chwrm-bf',stock: 7, prix:500,description:'Chawarmar de  Boeuf',category:'grill',souscategory:'boeuf'},       
+            {name:'Chawarmar  de Boeuf',code: 'chwrm-bf',stock: 7, prix:500,description:'Chawarmar de  Boeuf',category:'grill',souscategory:'boeuf'},
     ],
     },
     {
         title:'porc',
         data:[
-            {code: 'brchtte-prc',stock: 7, prix:500,description:'Brochettes de Porc',category:'grill',souscategory:'porc'}, 
-            {code: 'chwrm-prc',stock: 7, prix:500,description:'Chawarmar de  Porc',category:'grill',souscategory:'porc'},    
+            {name:"Brochettes de Porc",code: 'brchtte-prc',stock: 7, prix:500,description:'Brochettes de Porc',category:'grill',souscategory:'porc'}, 
+            {name: "Chawarma de Porc", code: 'chwrm-prc',stock: 7, prix:500,description:'Chawarmar de  Porc',category:'grill',souscategory:'porc'},  
+            
+            {name:'Porc fume',code: 'prc-fm',stock: 7, prix:2000,description:'Porc fume',category:'grill',souscategory:'porc'},
+            {name:'Porc braise',code: 'prc-brz',stock: 7, prix:7.000,description:'Porc braise sur charbon',category:'grill',souscategory:'porc'},
+            {name:'Porc frit',code: 'prc-frit',stock: 7, prix:6.000,description:'Porc frit a l"huile',category:'grill',souscategory:'porc'},
+            {name:'Porc roti',code: 'prc-roti',stock: 7, prix:6.000,description:'Porc roti en machine',category:'grill',souscategory:'porc'},
+
         ],
     }
     
@@ -301,7 +361,12 @@ export const dessertsKeys=[
         title:'fruit',
         data:[ 
             {name:'Cascade de Fruits ',code: 'cskd-frt',stock: 7, prix:1000,description:'Cascade de Fruits',category:'desserts',souscategory:'fruit'},
-            {name:'Farandone de fruits ',code: 'frd-frt',stock: 7, prix:2000,description:'Farandone de Fruits',category:'desserts',souscategory:'fruit'},],
+            {name:'Farandone de fruits ',code: 'frd-frt',stock: 7, prix:2000,description:'Farandone de Fruits',category:'desserts',souscategory:'fruit'},
+
+            {name:'Coupe royale de Fruits ',code: 'cpe-frt',stock: 7, prix:1000,description:'Coupe Royale de Fruits',category:'desserts',souscategory:'fruit'},
+            {name:'Salade de fruits ',code: 'sld-frt',stock: 7, prix:2000,description:'Salade de Fruits',category:'desserts',souscategory:'fruit'},
+            {name:'Tranches de Fruits ',code: 'trch-frt',stock: 7, prix:1000,description:'Tranches de Fruits',category:'desserts',souscategory:'fruit'},
+          ],
     }
     ];
 

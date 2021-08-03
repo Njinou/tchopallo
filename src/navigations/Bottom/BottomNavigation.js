@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text,Image} from 'react-native';
 
-import MyTabs,{TrackingMapScreen} from  './MyTabs';
+import MyTabs,{TrackingMapScreen,PermissionScreen} from  './MyTabs';
 import  {WebViewScreen} from './MyTabs';
 import {OrderStatusScreen} from './MyTabs'
 import cocktail from  '../../ressources/images/cocktail.jpeg';
@@ -23,32 +23,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-
-function PlatScreen (){
-    return (
-      <HomeScreen data={platsKeys} />
-    );
-    
-  } 
-
-  function DessertScreen (){
-    return (
-      <HomeScreen data={dessertsKeys} />
-    );
-    
-  }
-  function PdjScreen (){
-    return (
-      <HomeScreen data={pdjeuner} />
-    );
-    
-  }
-  function GrillScreen (){
-    return (
-      <HomeScreen data={grillKeys} />
-    );
-    
-  }
 //dessertsKeys
 
 function BottomNavigation() {
@@ -151,9 +125,9 @@ function BottomNavigation() {
 
         <Tab.Screen
           name="Order Status"
-          component={TrackingMapScreen}
+          component={PermissionScreen}
           options={{
-            tabBarLabel: 'Statut de la Commande',
+            tabBarLabel: 'Permission',
             tabBarIcon: () => (
               <Image
                 fadeDuration={0}
