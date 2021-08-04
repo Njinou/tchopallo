@@ -40,7 +40,7 @@ import * as Location from 'expo-location';
 
 import { WebView } from 'react-native-webview';
 
-import donnee,{pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys} from '../../ressources/database/Keys.js'
+import {pdjeuner,dessertsKeys,grillKeys,platsKeys,drinkKeys,chaudKeys} from '../../ressources/database/Keys.js'
 
 import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
@@ -350,6 +350,7 @@ your renderItem function renders components that follow React performance best p
 
 */
 
+console.log('chaudKeys',chaudKeys);
   return  (
     <View style={{justifyContent: 'space-between',flex:1}}>
      <SectionList
@@ -458,7 +459,7 @@ function LiqueurScreen (){
   
 }
 
-function Drinks() {
+export function Drinks() {
   return (
     <TopNavigator.Navigator>
       <TopNavigator.Screen name="Eau" component={EauScreen} />
@@ -466,6 +467,44 @@ function Drinks() {
       <TopNavigator.Screen name="Biere" component={BiereScreen} />
       <TopNavigator.Screen name="Vin" component={VinScreen} />
       <TopNavigator.Screen name="Liqueur" component={LiqueurScreen} />
+    </TopNavigator.Navigator>
+  );
+}
+
+
+
+function LegumesScreen (){
+  return (
+    <HomeScreen data={chaudKeys.Legume} />
+  );
+  
+}
+function SauceScreen (){
+  return (
+    <HomeScreen data={chaudKeys.Sauce} />
+  );
+  
+}
+function ProteinesScreen (){
+  return (
+    <HomeScreen data={chaudKeys.Proteine} />
+  );
+  
+}
+function TraditionelScreen (){
+  return (
+    <HomeScreen data={chaudKeys.Traditionnel} />
+  );
+  
+}
+
+export function PlatsScreen() {
+  return (
+    <TopNavigator.Navigator>
+      <TopNavigator.Screen name="Traditionel" component={TraditionelScreen} />
+      <TopNavigator.Screen name="Legumes" component={LegumesScreen} />
+      <TopNavigator.Screen name="Sauces" component={SauceScreen} />
+      <TopNavigator.Screen name="Proteines" component={ProteinesScreen} />
     </TopNavigator.Navigator>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View,Text,Image} from 'react-native';
 
-import MyTabs,{TrackingMapScreen,PermissionScreen} from  './MyTabs';
+import MyTabs,{TrackingMapScreen,PermissionScreen,Drinks,PlatsScreen} from  './MyTabs';
 import  {WebViewScreen} from './MyTabs';
 import {OrderStatusScreen} from './MyTabs'
 import cocktail from  '../../ressources/images/cocktail.jpeg';
@@ -60,6 +60,7 @@ function BottomNavigation() {
 
         <Tab.Screen
           name="PlatScreen"
+          component={PlatsScreen}
           options={{
             tabBarLabel: 'Plats Chauds',
             tabBarIcon: () => (
@@ -70,10 +71,7 @@ function BottomNavigation() {
               />
             ),
           }}
-        >
-        
-        {props => <MyTabs {...props} data={platsKeys} />}
-        </Tab.Screen>
+        />
 
         <Tab.Screen
           name="DessertScreen"
@@ -137,6 +135,23 @@ function BottomNavigation() {
             ),
           }}
         />
+
+      <Tab.Screen
+          name="Raffraichissement"
+          component={Drinks}
+          options={{
+            tabBarLabel: 'Raffraichissement',
+            tabBarIcon: () => (
+              <Image
+                fadeDuration={0}
+                style={{width: 22, height: 22}}
+                source={grillsIcon}
+              />
+            ),
+          }}
+        />
+
+
       </Tab.Navigator>
     );
   }
