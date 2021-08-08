@@ -498,6 +498,7 @@ function TraditionelScreen (){
   
 }
 
+
 export function PlatsScreen() {
   return (
     <TopNavigator.Navigator>
@@ -509,7 +510,11 @@ export function PlatsScreen() {
   );
 }
 
-
+//Grillade doit avoir des top navigator...
+//FRUITS...\
+//pour ne pas trop casser ma tete je peux juste shuffle l'image une fois que je l'ai retirer...
+//pour la nomenclature on mettra juste la specifite ... genre dans le dossier omelette on mettra spaghetti ... pour ormelette garni au spaghetti...
+//
 function OrderConfirmationScreen (props){
   return (
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>

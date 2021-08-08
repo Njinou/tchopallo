@@ -182,6 +182,15 @@ Legume:[
       {name:'Eru',code: 'eru',stock: 7, prix:2000,description:'Eru',category:'plats',souscategory:'legume'},
   ],
 },
+
+{
+  title:'champignon',
+  data:[
+    {name:'Steak Creme',code: 'chmpgn-stk-creme',stock: 7, prix:2000,description:'Champignons avec steak à la marge ',category:'plats',souscategory:'legume'},
+    {name:'Supreme de Poulet',code: 'chmpgn-sup-plet',stock: 7, prix:2000,description:'Supreme de Poulet aux champignons',category:'plats',souscategory:'legume'},
+],
+},
+
 ], 
 Sauce:[ 
   {
@@ -262,6 +271,7 @@ Proteine:  [
   
 ],
 
+
 Traditionnel:  [ 
   {
 
@@ -321,161 +331,370 @@ Traditionnel:  [
 
 };
 
-    //		
-export const  platsKeys=[ 
-
-  {
-        title:'chapallo',
-        data:[
-          
-            ],
-    },
-      
-    ];
-
+    //local viande
+    //grillade => proteine => folder =>chawara => pics 
+    //grillade plats ... boisson ont tous la meme profondeur .....
 export const grillKeys =[
-    {
-        title:'poulet',
-        data:[
-            {name:'Poulet fume',code: 'plt-fm',stock: 7, prix:2000,description:'Poulet fume',category:'grill',souscategory:'poulet'},
-            {name:'Poulet DG',code: 'plt-dg',stock: 7, prix:10000,description:'Poulet + plantain',category:'grill',souscategory:'poulet'},
-            {name:'Poulet braise',code: 'plt-brz',stock: 7, prix:7.000,description:'Poulet braise sur charbon',category:'grill',souscategory:'poulet'},
-            {name:'Poulet frit',code: 'plt-frit',stock: 7, prix:6.000,description:'Poulet frit a l"huile',category:'grill',souscategory:'poulet'},
-            {name:'Poulet roti',code: 'plt-roti',stock: 7, prix:6.000,description:'Poulet roti en machine',category:'grill',souscategory:'poulet'},
 
-            {name:'Brochettes de Poulet',code: 'plt-brcht',stock: 7, prix:2000,description:'brochettes faites à base de poulet',category:'grill',souscategory:'poulet'},
-            {name:'chawarma',code: 'plt-chwrm',stock: 7, prix:2000,description:'Poulet fume',category:'grill',souscategory:'poulet'},
-        ],
-    },
-    {
-        title:'boeuf',
-        data:[{name:'Brochettes de Viandes de Boeuf',code: 'brchtte-bf',stock: 7, prix:500,description:'Brochettes de Boeuf',category:'grill',souscategory:'boeuf'},
-            {name:'Chawarmar  de Boeuf',code: 'chwrm-bf',stock: 7, prix:500,description:'Chawarmar de  Boeuf',category:'grill',souscategory:'boeuf'},
-            {name:'Roti de Boeuf a la cammerounaise',code: 'Rti-bf',stock: 7, prix:1500,description:'Roti de Boeuf  a la cammerounaise + Plantain/Pommes',category:'grill',souscategory:'boeuf'},
+  { category:'grillades',
+    title:'boulette',
+    data:[
+        {name:"boeuf-cru",code: 'blte-bf-cru',stock: 7, prix:500,description:'Boulettes de boeuf cru'}, 
     ],
-    },
-    {
-        title:'porc',
-        data:[
-            {name:"Brochettes de Porc",code: 'brchtte-prc',stock: 7, prix:500,description:'Brochettes de Porc',category:'grill',souscategory:'porc'}, 
-            {name: "Chawarma de Porc", code: 'chwrm-prc',stock: 7, prix:500,description:'Chawarmar de  Porc',category:'grill',souscategory:'porc'},  
-            
-            {name:'Porc fume',code: 'prc-fm',stock: 7, prix:2000,description:'Porc fume',category:'grill',souscategory:'porc'},
-            {name:'Porc braise',code: 'prc-brz',stock: 7, prix:7.000,description:'Porc braise sur charbon',category:'grill',souscategory:'porc'},
-            {name:'Porc frit',code: 'prc-frit',stock: 7, prix:6.000,description:'Porc frit a l"huile',category:'grill',souscategory:'porc'},
-            {name:'Porc roti',code: 'prc-roti',stock: 7, prix:6.000,description:'Porc roti en machine',category:'grill',souscategory:'porc'},
+},
 
-        ],
-    }
-    
+{ category:'grillades',
+title:'brochette',
+data:[
+    {name:"boeuf",code: 'brchte-bf',stock: 7, prix:500,description:'Brochettes de boeuf '}, 
+    {name: "plantain", code: 'brchte-pltn',stock: 7, prix:500,description:'Brochettes de plantain'},  
+    {name:'porc',code: 'brchte-prc',stock: 7, prix:2000,description:'Brochettes de porc'},
+    {name:'poulet',code: 'brchte-plt',stock: 7, prix:2000,description:'Brochettes de poulet'},
+
+],
+},
+
+{ category:'grillades',
+title:'cotelette',
+data:[
+
+],
+},
+
+{ category:'grillades',
+title:'dg',
+data:[
+
+],
+},
+{ category:'grillades',
+title:'frit',
+data:[
+],
+},
+{ category:'grillades',
+title:'fume',
+data:[
+    {name:"poulet",code: 'fme-plt',stock: 7, prix:500,description:'Poulet fume'}, 
+
+],
+},
+{ category:'grillades',
+title:'local',
+data:[
+    {name:"plantain-huile-rouge",code: 'lkl-pltn-hle-rge',stock: 7, prix:500,description:'Plantain Braise avec huile rouge'}, 
+    {name: "plantain-safour", code: 'lkl-pltn-sfr',stock: 7, prix:500,description:'Plantain safour'},  
+    {name:'Mais',code: 'lkl-mys',stock: 7, prix:2000,description:'Mais grille'},
+
+],
+},
+{ category:'grillades',
+title:'roti',
+data:[
+    {name:"boeuf",code: 'rti-bf',stock: 7, prix:500,description:'Roti de bopeuf'}, 
+    {name: "poulet", code: 'rti-plt',stock: 7, prix:500,description:'Roti de poulet'},  
+
+],
+},
+{ category:'grillades',
+title:'shawarma',
+data:[
+    {name:"boeuf",code: 'shwrm-bf',stock: 7, prix:500,description:'Shawarma au boeuf '}, 
+    {name: "poulet", code: 'shwrm-plt',stock: 7, prix:500,description:'Shawarma au poult'},
+
+],
+}    
 ];
 
 export const fastFoodKeys =[];
 
 export const   entreesKeys= [ 
-    { title:'patisserie',
+  {
+    category:'entrees',
+    title: 'Macedoine', 
     data:[
-         {name:'Pizza',code: 'pza',stock: 7, prix:1000,description:'Pizza ',category:'entrees',souscategory:'patisserie'},
-         {name:'Quiche',code: 'qche',stock: 7, prix:1000,description:'Quiches ',category:'entrees',souscategory:'patisserie'},
-         {name:'Hamurger',code: 'hmbgr',stock: 7, prix:1000,description:'Hamburger ',category:'entrees',souscategory:'patisserie'},
-         {name:'Mousse au Chocolat',code: 'msse-chlt',stock: 7, prix:1000,description:'Mousse chocolat ',category:'entrees',souscategory:'patisserie'},
-     ],
-    },
-    {
-    title:'oeuvre',
-    data: [
-        {name:'Oeufs  Mimosa',code: 'mimz',stock: 7, prix:1000,description:' Oeuf Bouillie accompagne des vegetaux',category:'entrees',souscategory:'oeuvre'},
-        {name:'Assiettes de crudites',code: 'crdt',stock: 7, prix:1000,description:' Salade + tomate +... ',category:'entrees',souscategory:'oeuvre'},
-        {name:'Carottes Hawaienne',code: 'hawai',stock: 7, prix:1000,description:'Carottes rapes +.... ',category:'entrees',souscategory:'oeuvre'},
-        {name:'Salade Mexicaine',code: 'mexicaine',stock: 7, prix:1500,description:'Salade + ... ',category:'entrees',souscategory:'oeuvre'},
-        {name:'Cocktail d"avocat',code: 'cock',stock: 7, prix:2000,description:'Avocats + ... ',category:'entrees',souscategory:'oeuvre'},
-        {name:'Farci de Tomate',code: 'fr6',stock: 7, prix:1000,description:'Tomate + Oignons',category:'entrees',souscategory:'oeuvre'},
-        {name:'Macedoine',code: 'mcdn',stock: 7, prix:1000,description:'Mais + petite pois +.... ',category:'entrees',souscategory:'oeuvre'},
-        ],
-    }
-     
+        {name:'carotte',code: 'mcdn-krt',stock: 7, prix:1000,description:' Carottes Hawaienne '}, //add name of the restaurant providing the service
+        {name:'legume',code: 'mcdn-lgm',stock: 7, prix:1000,description:'Macedoine de legume '},
+        {name:'macedoine',code: 'mcdn-mcdn',stock: 7, prix:1000,description:'Macedoine '},
+        {name:'petit-poids',code: 'mcdn-ptpd',stock: 7, prix:1000,description:'Macedoine aux petits poids '},
+        {name:'sans-sauce',code: 'mcdn-ssce',stock: 7, prix:1000,description:'Macedoine sans sauce'},
+    ],
+  },
+
+  {
+    category:'entrees',
+    title: 'avocat', 
+    data:[
+        {name:'coupe-crevette',code: 'avk-krt',stock: 7, prix:1000,description:' Avocat à la coupe-crevette  '}, //add name of the restaurant providing the service
+        {name:'crevettes',code: 'avk-lgm',stock: 7, prix:1000,description:'Avocat aux crevettes'},
+        {name:'saucecocktail',code: 'VK-mcdn',stock: 7, prix:1000,description:'Avocat à la sauce cocktail '},
+    ],
+  },
+
+  {
+    category:'entrees',
+    title: 'crudite', 
+    data:[
+        {name:'coupe-crevette',code: 'avk-krt',stock: 7, prix:1000,description:' Avocat à la coupe-crevette  '}, //add name of the restaurant providing the service
+        {name:'crevettes',code: 'avk-lgm',stock: 7, prix:1000,description:'Avocat aux crevettes'},
+        {name:'saucecocktail',code: 'VK-mcdn',stock: 7, prix:1000,description:'Avocat à la sauce cocktail '},
+    ],
+  },
+
+  {
+    category:'entrees',
+    title: 'salade', 
+    data:[
+        {name:'haricots-noirs',code: 'sld-hark',stock: 7, prix:1000,description:' Salade aux haricots noirs '}, //add name of the restaurant providing the service
+        {name:'nachos',code: 'sld-ncho',stock: 7, prix:1000,description:'Salade au nachos'},
+        {name:'poulet',code: 'sld-plt',stock: 7, prix:1000,description:'Salade au poulet'},
+    ],
+  },
+
+
+  {
+    category:'entrees',
+    title: 'crudite',
+    data:[
+        {name:'Coleslaw',code: 'crdt-clsl',stock: 7, prix:1000,description:' Crudite Coleslaw '}, //add name of the restaurant providing the service
+        {name:'IMG_1661',code: 'crdt-img',stock: 7, prix:1000,description:'Crudite 661'},
+        {name:'coleslawavectasalade',code: 'crdt-clslsd',stock: 7, prix:1000,description:'Salade au poulet'},
+        {name:'crudite 1',code: 'crdt-cr1',stock: 7, prix:1000,description:' crudite  '}, 
+        {name:'crudite 2',code: 'crdt-cr2',stock: 7, prix:1000,description:' crudite  '},
+        {name:'crudite 3',code: 'crdt-cr3',stock: 7, prix:1000,description:' crudite '},
+        {name:'crudites 4',code: 'crdt-cr4',stock: 7, prix:1000,description:' crudite  '},
+        {name:'crudites 5',code: 'crdt-cr5',stock: 7, prix:1000,description:' crudite '},
+        {name:'crudites 6',code: 'crdt-cr6',stock: 7, prix:1000,description:'crudite '},
+        {name:'crudites 7',code: 'crdt-cr7',stock: 7, prix:1000,description:' crudite  '},
+        {name:'crudites',code: 'crdt-cr',stock: 7, prix:1000,description:'crudite '},
+        {name:'crudites8',code: 'crdt-cr8',stock: 7, prix:1000,description:'crudite  '}, 
+    ],
+  },
+
+  {
+    category:'entrees',
+    title: 'farcie',
+    data:[
+        {name:'tomate',code: 'frc-tmt',stock: 7, prix:1000,description:'Farcie de Tomate'},
+    ],
+  },	
+  {
+    category:'entrees',
+    title: 'oeuf',
+    data:[
+        {name:'Mimosa',code: 'oef-mmz',stock: 7, prix:1000,description:'Oeuf Mimosa'},
+        {name:'Oeufmimosa',code: 'oef-ommz',stock: 7, prix:1000,description:'Oeuf-mimosa'},
+    ],
+  },
+
+  {
+    category:'entrees',
+    title: 'quiche',
+    data:[
+        {name:'epinard',code: 'qch-epnrd',stock: 7, prix:1000,description:'epinard'},
+    ],
+  },
     ];
 
+
+    export const vienoiseriessKeys=[
+
+      {
+        category:'vienoiseries',
+        title: 'beignet', 
+        data:[
+            {name:'soufflets',code: 'bgnt-sflt',stock: 7, prix:1000,description:' Beignets Soufflets '},
+        ],
+    },
+    {
+      category:'vienoiseries',
+      title: 'croissant', 
+      data:[
+          {name:'beurre',code: 'crst-br',stock: 7, prix:1000,description:'Croissants au beurre'},
+          {name:'chocolat',code: 'crst-chlt',stock: 7, prix:1000,description:'Croissants au chocolat'},
+      ],
+  },
+  {
+    category:'vienoiseries',
+    title: 'feuilletes', 
+    data:[
+        {name:'thon',code: 'flt-thn',stock: 7, prix:1000,description:' Feuilletes au thon'},
+    ],
+},
+{
+  category:'vienoiseries',
+  title: 'hamburger', 
+  data:[
+      {name:'boeuf',code: 'hmbgr-bf',stock: 7, prix:1000,description:'Hamburger au boeuf'},
+  ],
+},
+{
+  category:'vienoiseries',
+  title: 'nems', 
+  data:[
+      {name:'viande',code: 'nms-vde',stock: 7, prix:1000,description:'Nems à la viande'},
+  ],
+},
+{
+  category:'vienoiseries',
+  title: 'palmier', 
+  data:[
+      {name:'simple',code: 'plmr-smple',stock: 7, prix:1000,description:' Palmiers '},
+  ],
+},
+{
+  category:'vienoiseries',
+  title: 'pizza',
+  data:[
+      {name:'fromage',code: 'pza-frmge',stock: 7, prix:1000,description:'Pizza au fromage'},
+      {name:'peperroni',code: 'pza-pprni',stock: 7, prix:1000,description:'Pizza au peperroni'},
+      {name:'royale',code: 'pza-ryle',stock: 7, prix:1000,description:'Pizza royale'},
+      {name:'sardine',code: 'pza-srdine',stock: 7, prix:1000,description:'Pizza à la sardine'},
+      {name:'sardinoviande',code: 'pza-srdinovde',stock: 7, prix:1000,description:'Pizza à la sardine et viande hachée'},
+      {name:'vegetable',code: 'pza-vgtble',stock: 7, prix:1000,description:'Pizza au legumes'},
+
+  ],
+},
+{
+  category:'vienoiseries',
+  title: 'sandwich', 
+  data:[
+  ],
+},
+
+  ]
+    //ressources/foods/desserts/
 export const dessertsKeys=[
-    {
-        title: 'patisserie', 
-        data:[
-            {name:'Crepes',code: 'crp',stock: 7, prix:1000,description:'Crepes',category:'desserts',souscategory:'patisserie'},
-            {name:'tartes',code: 'trte',stock: 7, prix:1000,description:'Tartes',category:'desserts',souscategory:'patisserie'},
-            {name:'Moka',code: 'mk',stock: 7, prix:1000,description:'Moka',category:'desserts',souscategory:'patisserie'},
-        ],
-    },
-    {
-        title: 'laitier', 
-        data:[
-            {name:'Cremes',code: 'crm',stock: 7, prix:1000,description:'Cemes',category:'desserts',souscategory:'laitier'},
-            {name:'Cremes renversees au Caramel',code: 'crm-krml',stock: 7, prix:1000,description:' Cremes au Caramel',category:'desserts',souscategory:'laitier'},
-            {name:'Glaces ',code: 'glc',stock: 7, prix:1000,description:' Chocolat / Vanille/fraise',category:'desserts',souscategory:'laitier'},
-            {name:'Kossam',code: 'ksam',stock: 7, prix:1000,description:'lait fermente',category:'desserts',souscategory:'laitier'},
-        ],
-    },
-    {
-        title:'fruit',
-        data:[ 
-            {name:'Cascade de Fruits ',code: 'cskd-frt',stock: 7, prix:1000,description:'Cascade de Fruits',category:'desserts',souscategory:'fruit'},
-            {name:'Farandone de fruits ',code: 'frd-frt',stock: 7, prix:2000,description:'Farandone de Fruits',category:'desserts',souscategory:'fruit'},
 
-            {name:'Coupe royale de Fruits ',code: 'cpe-frt',stock: 7, prix:1000,description:'Coupe Royale de Fruits',category:'desserts',souscategory:'fruit'},
-            {name:'Salade de fruits ',code: 'sld-frt',stock: 7, prix:2000,description:'Salade de Fruits',category:'desserts',souscategory:'fruit'},
-            {name:'Tranches de Fruits ',code: 'trch-frt',stock: 7, prix:1000,description:'Tranches de Fruits',category:'desserts',souscategory:'fruit'},
-          ],
-    }
-    ];
+  {
+    category:'desserts',
+    title: 'fruit', 
+    data:[
+        {name:'cascade',code: 'frt-cskd',stock: 7, prix:1000,description:' fruits en cascade '}, //add name of the restaurant providing the service
+        {name:'farandone',code: 'frt-frndn',stock: 7, prix:1000,description:'farandone de fruits '},
+        {name:'royale',code: 'frt-ryle',stock: 7, prix:1000,description:'coupe royale  de fruits '},
+        {name:'salade',code: 'frt-slde',stock: 7, prix:1000,description:'salade de fruits '},
+        {name:'tranche',code: 'frt-trnch',stock: 7, prix:1000,description:'tranche de fruits'},
+    ],
+},
+
+{
+  category:'desserts',
+  title: 'tarte', 
+  //bleuets.jpeg	.jpeg	.jpeg
+  data:[
+      {name:'bleuets',code: 'trt-blt',stock: 7, prix:1000,description:'Tarte aux bleuets'}, //add name of the restaurant providing the service
+      {name:'chocolat',code: 'trt-chklt',stock: 7, prix:1000,description:'Tarte au chocolat'},
+      {name:'fraises',code: 'trt-frz',stock: 7, prix:1000,description:'Tarte aux fraises'},
+  ],
+},
+
+{
+  category:'desserts',
+  title: 'glace', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images... 
+  data:[
+      {name:'bolero',code: 'glc-blr',stock: 7, prix:1000,description:'Glace bolero'}, //add name of the restaurant providing the service
+      {name:'chat',code: 'glc-cht',stock: 7, prix:1000,description:'Glace en langue de Chat'},
+      {name:'choco',code: 'glc-chk',stock: 7, prix:1000,description:'Glace au chocolat'},
+
+      {name:'coupe',code: 'glc-cpe',stock: 7, prix:1000,description:'coupe de Glace'}, //add name of the restaurant providing the service
+      {name:'fraise',code: 'glc-frz',stock: 7, prix:1000,description:'Glace à la fraise'},
+      {name:'menthe',code: 'glc-mnte',stock: 7, prix:1000,description:'Glace à la menthe'},
+  ],
+},
+
+{
+  category:'desserts',
+  title: 'mousse', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images...  .jpeg
+  data:[
+      {name:'chocolat',code: 'mss-chk',stock: 7, prix:1000,description:'Mousse au chocolat'},
+  ],
+},
+
+{
+  category:'desserts',
+  title: 'lait', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images...  .jpeg
+  data:[
+      {name:'kossam',code: 'lt-ksm',stock: 7, prix:1000,description:'Lait fermente'},
+  ],
+},
+
+
+{
+  category:'desserts',
+  title: 'moka', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images...  .jpeg
+  data:[
+      {name:'canelle',code: 'mk-knl',stock: 7, prix:1000,description:'Moka à la canelle'},
+      {name:'Moka',code: 'mk-mk',stock: 7, prix:1000,description:'Moka cafe'},
+      
+  ],
+},
+
+
+{
+  category:'desserts',
+  title: 'creme', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images...  .jpeg
+  data:[
+      {name:'caramelle',code: 'crm-krml',stock: 7, prix:1000,description:'Creme au caramel'},     
+  ],
+},
+
+{
+  category:'desserts',
+  title: 'crepe', 
+// je dois mettre dans le storage des dossiers qui contiennent plusieurs images...  .jpeg
+  data:[
+      {name:'crepes',code: 'crp-vanl',stock: 7, prix:1000,description:'crepes à la vanille'},     
+  ],
+},
+  ];
 
 export const  pdjeuner=[
-       { title:'local',
+  	  { category:'pdj',
+         title:'bhb',
         data:[
-            {name:'Beignets-Haricots-Bouillie',code: 'bhb',stock: 7, prix:500,description:'Beignets + Haricot + Bouilie',category:'pdj',souscategory:'local'},
-            {name:'Sapghetti Saute',code: 'spgt-ste',stock: 7, prix:600,description:'Spaghetti saute + pain',category:'pdj',souscategory:'local'},
-            {name:'Puree d"Avocat',code: 'pree-avcat',stock: 7, prix:600,description:'Puree d"avocat + pain',category:'pdj',souscategory:'local'},
-            {name:'Omelette Spaghetti garnie',code: 'omelette',stock: 7, prix:600,description:'Omelette + Spaghetti/haricot',category:'pdj',souscategory:'local'},
-            {name:'Bouillon',code: 'bllon',stock: 7, prix:1000,description:'Bouillon de Pattes de Boeuf ou Poisson',category:'pdj',souscategory:'local'},
+            {name:'Beignets-Haricots-Bouillie',code: 'bhb',stock: 7, prix:500,description:'Beignets + Haricot + Bouilie'},
         ]
-       },
-       {title :"boissonsChaude",
-       data:[
-        {name:'Café',code: 'kfe',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
-        {name:'Nescafe',code: 'nskf',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
-        {name:'Lait',code: 'lait',stock: 7, prix:500,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'boissonsChaude'},
-        {name:'Chocolat',code: 'chlt',stock: 7, prix:500,description:'Ovaltine /Matinal',category:'pdj',souscategory:'boissonsChaude'},
-       ],
-
-       },
-       {
-           title : "infusion",
-           data :[ {name:'The',code: 'T',stock: 7, prix:500,description:'The menthe ou autres....',category:'pdj',souscategory:'infusion'},
-           {name:'Tisane',code: 'Tsane',stock: 7, prix:500,description:'Tisane',category:'pdj',souscategory:'infusion'},
-           {name:'Bantou',code: 'btu',stock: 7, prix:500,description:'Bantou',category:'pdj',souscategory:'infusion'},]
-       },
-       {
-           title :"vienoiserie",
-           data : [{name:'Pain Choco',code: 'pn-chko',stock: 7, prix:1000,description:'Croissant au Chocolat',category:'pdj',souscategory:'vienoiserie'},
-           {name:'palmier',code: 'palmier',stock: 7, prix:1000,description:'pate feuillete saupoudree de sucre',category:'pdj',souscategory:'vienoiserie'},
-           {name:'croissant',code: 'crssant',stock: 7, prix:1000,description:'pate feuilletee beurree ',category:'pdj',souscategory:'vienoiserie'},
-           {name:'feuilletes ',code: 'feuilletes',stock: 7, prix:1000,description:'pates feuillete ...',category:'pdj',souscategory:'vienoiserie'},],
-
-       },
-       {
-           title : "etranger",
-           data:[ {name:'Classique',code: 'clsq',stock: 7, prix:1000,description:'Brioche + Tartine + Boisson chaude',category:'pdj',souscategory:'etranger'},
-           {name:'Continental',code: 'cntl',stock: 7, prix:1500,description:'classique + Omelette ',category:'pdj',souscategory:'etranger'},
-           {name:'Chapallo',code: 'chaplo',stock: 7, prix:2000,description:'continental + Boissoon. froide ou fruits',category:'pdj',souscategory:'etranger'},
-           {name:'5etoiles',code: 'star',stock: 7, prix:3000,description:'Chapallo + Crudites ',category:'pdj',souscategory:'etranger'}]
-       },
-    
-       {
-        title : "Ble",
-        data:[ 
-          {name:'Macaroni plantain',code: 'mkroni-pltn',stock: 7, prix:1500,description:'Macaroni + Plantains',category:'plats',souscategory:'chapallo'},
+       }, 
+       { category:'pdj',
+       title:'bouillon',
+      data:[
+          {name:'Poisson-macabo',code: 'bll-psson-mkb',stock: 7, prix:500,description:'Bouillon de poisson au macabo'},
+          {name:'poisson-plantain',code: 'bll-psson-pltn',stock: 7, prix:600,description:'Bouillon de poisson au plantain vapeur'},
+          {name:'queue-de-boeuf',code: 'bll-qe-bf',stock: 7, prix:600,description:'Bouillon de Queue de Boeuf'},
+          {name:'viande-plantain',code: 'bll-vde-pltn',stock: 7, prix:600,description:'Bouillon viande de boeuf avec plantain'},
       ]
-    }
-
-       
+     },
+     { category:'pdj',
+     title:'cafe',
+    data:[
+        {name:'Cafe',code: 'kfe-kfe',stock: 7, prix:500,description:'Cafe'},
+        {name:'Nescafe',code: 'kfe-nskfe',stock: 7, prix:600,description:'Nescafe'},
+    ]
+   },
+   { category:'pdj',
+   title:'lait',
+  data:[
+      {name:'simple',code: 'lt-smple',stock: 7, prix:500,description:'Tasse de lait'},
+  ]
+ },
+ { category:'pdj',
+ title:'omelette',
+data:[
+    {name:'spaghetti-saucison',code: 'omlet-spgheti-saucisn',stock: 7, prix:500,description:'Omelette Spaghetti Saucisson'},
+]
+},
+{ category:'pdj',
+title:'the',
+data:[
+   {name:'simple',code: 'T-smple',stock: 7, prix:500,description:'Tasse de The'},
+]
+},      
 ];
 //ORDRE PDJ, ENTREES, PLATS CHAUDS , DESSERTS , RAFFRAICHISSEMENT ...  FAST FOOD...
 const Keys = {pdjeuner,dessertsKeys,entreesKeys,grillKeys,platsKeys,drinkKeys,chaudKeys};
